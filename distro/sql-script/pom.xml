@@ -208,6 +208,10 @@
                   <filelist dir="target/camunda-engine-${project.version}/org/camunda/bpm/engine/db/create" files="activiti.cockroachdb.create.engine.sql activiti.cockroachdb.create.case.engine.sql activiti.cockroachdb.create.decision.engine.sql activiti.cockroachdb.create.history.sql activiti.cockroachdb.create.case.history.sql activiti.cockroachdb.create.decision.history.sql" />
                 </concat>
 
+                <concat destfile="target/sql/create/informix_engine_${project.version}.sql" fixlastline="yes">
+                  <filelist dir="target/camunda-engine-${project.version}/org/camunda/bpm/engine/db/create" files="activiti.informix.create.engine.sql activiti.informix.create.case.engine.sql activiti.informix.create.decision.engine.sql  activiti.informix.create.history.sql activiti.informix.create.case.history.sql activiti.informix.create.decision.history.sql" />
+                </concat>
+
                 <!-- add identity create files -->
                 <copy todir="target/sql/create" flatten="false">
                   <fileset dir="target/camunda-engine-${project.version}/org/camunda/bpm/engine/db/create" />
@@ -252,6 +256,10 @@
 
                 <concat destfile="target/sql/drop/cockroachdb_engine_${project.version}.sql" fixlastline="yes">
                   <filelist dir="target/camunda-engine-${project.version}/org/camunda/bpm/engine/db/drop" files="activiti.cockroachdb.drop.decision.engine.sql activiti.cockroachdb.drop.case.engine.sql activiti.cockroachdb.drop.engine.sql activiti.cockroachdb.drop.decision.history.sql activiti.cockroachdb.drop.case.history.sql activiti.cockroachdb.drop.history.sql" />
+                </concat>
+
+                <concat destfile="target/sql/drop/informix_engine_${project.version}.sql" fixlastline="yes">
+                  <filelist dir="target/camunda-engine-${project.version}/org/camunda/bpm/engine/db/drop" files="activiti.informix.drop.decision.engine.sql activiti.informix.drop.case.engine.sql activiti.informix.drop.engine.sql activiti.informix.drop.decision.history.sql activiti.informix.drop.case.history.sql activiti.informix.drop.history.sql" />
                 </concat>
 
                 <!-- add identity drop files -->
