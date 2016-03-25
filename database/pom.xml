@@ -34,6 +34,7 @@
     <version.db2-9.7>9.7</version.db2-9.7>
     <version.db2>${version.db2-9.7}</version.db2>
     <version.postgresql>9.3-1102-jdbc4</version.postgresql>
+    <version.informix>4.10</version.informix>
 
     <!-- needed for sql script and backward compatibility checks -->
     <camunda.version.old>7.9.0</camunda.version.old>
@@ -86,6 +87,11 @@
         <artifactId>postgresql</artifactId>
         <version>${version.postgresql}</version>
       </dependency>
+      <dependency>
+        <groupId>com.ibm.informix.jdbc</groupId>
+        <artifactId>ifxjdbc</artifactId>
+        <version>${version.informix}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -135,6 +141,11 @@
               <groupId>com.h2database</groupId>
               <artifactId>h2</artifactId>
               <version>${version.h2}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.ibm.informix.jdbc</groupId>
+              <artifactId>ifxjdbc</artifactId>
+              <version>${version.informix}</version>
             </dependency>
           </dependencies>
           <configuration>
@@ -360,6 +371,23 @@
         <dependency>
           <groupId>com.microsoft.sqlserver</groupId>
           <artifactId>sqljdbc4</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>informix</id>
+      <properties>
+        <database.type>informix</database.type>
+        <database.driver>com.informix.jdbc.IfxDriver</database.driver>
+        <database.datasource.class>com.informix.jdbcx.IfxDataSource</database.datasource.class>
+      </properties>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.ibm.informix.jdbc</groupId>
+          <artifactId>ifxjdbc</artifactId>
           <scope>test</scope>
         </dependency>
       </dependencies>
