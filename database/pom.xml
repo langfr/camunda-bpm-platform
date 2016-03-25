@@ -31,6 +31,7 @@
     <version.db2>${version.db2-10.5}</version.db2>
     <version.postgresql>42.3.3</version.postgresql>
     <version.liquibase>4.4.0</version.liquibase>
+    <version.informix>4.10</version.informix>
 
     <!-- CockroachDB is compatible with PostgreSQL 9.5,
     so a different version of the JDBC driver needs to be used -->
@@ -94,6 +95,11 @@
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
         <version>${version.postgresql}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ibm.informix.jdbc</groupId>
+        <artifactId>ifxjdbc</artifactId>
+        <version>${version.informix}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -583,6 +589,39 @@
       </dependencies>
     </profile>
 
+    <profile>
+      <id>informix</id>
+      <properties>
+        <database.type>informix</database.type>
+        <database.driver>com.informix.jdbc.IfxDriver</database.driver>
+        <database.datasource.class>com.informix.jdbcx.IfxDataSource</database.datasource.class>
+      </properties>
+
+      <dependencies>
+        <dependency>
+          <groupId>com.ibm.informix.jdbc</groupId>
+          <artifactId>ifxjdbc</artifactId>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>sql-maven-plugin</artifactId>
+              <dependencies>
+                <dependency>
+                  <groupId>com.ibm.informix.jdbc</groupId>
+                  <artifactId>ifxjdbc</artifactId>
+                  <version>${version.informix}</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
   </profiles>
 
 </project>
