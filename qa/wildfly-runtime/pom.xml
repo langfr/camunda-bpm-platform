@@ -37,6 +37,11 @@
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>com.ibm.informix.jdbc</groupId>
+      <artifactId>ifxjdbc_all</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.python</groupId>
