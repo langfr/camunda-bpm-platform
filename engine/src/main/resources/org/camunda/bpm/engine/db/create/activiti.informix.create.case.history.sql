@@ -38,7 +38,10 @@ create table if not exists ACT_HI_CASEACTINST (
 create index if not exists ACT_IDX_HI_CAS_I_CLOSE on ACT_HI_CASEINST(CLOSE_TIME_);
 create index if not exists ACT_IDX_HI_CAS_I_BUSKEY on ACT_HI_CASEINST(BUSINESS_KEY_);
 create index if not exists ACT_IDX_HI_CAS_I_TENANT_ID on ACT_HI_CASEINST(TENANT_ID_);
+create index if not exists ACT_IDX_HI_CAS_I_CASE_DEF_ID on ACT_HI_CASEINST(CASE_DEF_ID_);
+
 create index if not exists ACT_IDX_HI_CAS_A_I_CREATE on ACT_HI_CASEACTINST(CREATE_TIME_);
 create index if not exists ACT_IDX_HI_CAS_A_I_END on ACT_HI_CASEACTINST(END_TIME_);
 create index if not exists ACT_IDX_HI_CAS_A_I_COMP on ACT_HI_CASEACTINST(CASE_ACT_ID_, END_TIME_, ID_);
 create index if not exists ACT_IDX_HI_CAS_A_I_TENANT_ID on ACT_HI_CASEACTINST(TENANT_ID_);
+create index if not exists ACT_IDX_HI_CAS_A_I_CASE_INST_ID on ACT_HI_CASEACTINST(CASE_INST_ID_);
