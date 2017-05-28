@@ -120,10 +120,11 @@ create table if not exists ACT_HI_DETAIL (
   TEXT2_ lvarchar(4000),
   SEQUENCE_COUNTER_ bigint,
   TENANT_ID_ varchar(64),
+  OPERATION_ID_ varchar(64),
   primary key (ID_)
 );
 
-create table ACT_HI_IDENTITYLINK (
+create table if not exists ACT_HI_IDENTITYLINK (
   ID_ varchar(64) not null,
   TIMESTAMP_ datetime year to fraction(5) not null,
   TYPE_ varchar(255),
@@ -237,7 +238,7 @@ create table if not exists ACT_HI_JOB_LOG (
   primary key (ID_)
 );
 
-create table ACT_HI_BATCH (
+create table if not exists ACT_HI_BATCH (
   ID_ varchar(64) not null,
   TYPE_ varchar(255),
   TOTAL_JOBS_ integer,
@@ -252,9 +253,31 @@ create table ACT_HI_BATCH (
   primary key (ID_)
 );
 
+create table if not exists ACT_HI_EXT_TASK_LOG (
+    ID_ varchar(64) not null,
+    TIMESTAMP_ datetime year to fraction(5) not null,
+    EXT_TASK_ID_ varchar(64) not null,
+    RETRIES_ integer,
+    TOPIC_NAME_ varchar(255),
+    WORKER_ID_ varchar(255),
+    PRIORITY_ bigint not null default 0,
+    ERROR_MSG_ lvarchar(4000),
+    ERROR_DETAILS_ID_ varchar(64),
+    ACT_ID_ varchar(255),
+    ACT_INST_ID_ varchar(64),
+    EXECUTION_ID_ varchar(64),
+    PROC_INST_ID_ varchar(64),
+    PROC_DEF_ID_ varchar(64),
+    PROC_DEF_KEY_ varchar(255),
+    TENANT_ID_ varchar(64),
+    STATE_ integer,
+    primary key (ID_)
+);
+
 create index if not exists ACT_IDX_HI_PRO_INST_END on ACT_HI_PROCINST(END_TIME_);
 create index if not exists ACT_IDX_HI_PRO_I_BUSKEY on ACT_HI_PROCINST(BUSINESS_KEY_);
 create index if not exists ACT_IDX_HI_PRO_INST_TENANT_ID on ACT_HI_PROCINST(TENANT_ID_);
+create index if not exists ACT_IDX_HI_PRO_INST_PROC_DEF_ID on ACT_HI_PROCINST(PROC_DEF_ID_);
 create index if not exists ACT_IDX_HI_PRO_INST_PROC_DEF_KEY on ACT_HI_PROCINST(PROC_DEF_KEY_);
 
 create index if not exists ACT_IDX_HI_ACT_INST_START on ACT_HI_ACTINST(START_TIME_);
@@ -267,6 +290,9 @@ create index if not exists ACT_IDX_HI_ACT_INST_PROC_DEF_KEY on ACT_HI_ACTINST(PR
 
 create index if not exists ACT_IDX_HI_TASK_INST_TENANT_ID on ACT_HI_TASKINST(TENANT_ID_);
 create index if not exists ACT_IDX_HI_TASK_INST_PROC_DEF_KEY on ACT_HI_TASKINST(PROC_DEF_KEY_);
+create index if not exists ACT_IDX_HI_TASK_INST_PROC_INST_ID on ACT_HI_TASKINST(PROC_INST_ID_);
+create index if not exists ACT_IDX_HI_TASK_INST_CASE_DEF_ID on ACT_HI_TASKINST(CASE_DEF_ID_);
+create index if not exists ACT_IDX_HI_TASK_INST_CASE_INST_ID on ACT_HI_TASKINST(CASE_INST_ID_);
 
 create index if not exists ACT_IDX_HI_DETAIL_PROC_INST on ACT_HI_DETAIL(PROC_INST_ID_);
 create index if not exists ACT_IDX_HI_DETAIL_ACT_INST on ACT_HI_DETAIL(ACT_INST_ID_);
@@ -281,7 +307,9 @@ create index if not exists ACT_IDX_HI_DETAIL_PROC_DEF_KEY on ACT_HI_DETAIL(PROC_
 create index if not exists ACT_IDX_HI_IDENT_LNK_USER on ACT_HI_IDENTITYLINK(USER_ID_);
 create index if not exists ACT_IDX_HI_IDENT_LNK_GROUP on ACT_HI_IDENTITYLINK(GROUP_ID_);
 create index if not exists ACT_IDX_HI_IDENT_LNK_TENANT_ID on ACT_HI_IDENTITYLINK(TENANT_ID_);
+create index if not exists ACT_IDX_HI_IDENT_LNK_PROC_DEF_ID on ACT_HI_IDENTITYLINK(PROC_DEF_ID_);
 create index if not exists ACT_IDX_HI_IDENT_LNK_PROC_DEF_KEY on ACT_HI_IDENTITYLINK(PROC_DEF_KEY_);
+create index if not exists ACT_IDX_HI_IDENT_LNK_TASK_ID on ACT_HI_IDENTITYLINK(TASK_ID_);
 
 create index if not exists ACT_IDX_HI_PROCVAR_PROC_INST on ACT_HI_VARINST(PROC_INST_ID_);
 create index if not exists ACT_IDX_HI_PROCVAR_NAME_TYPE on ACT_HI_VARINST(NAME_, VAR_TYPE_);
@@ -290,13 +318,21 @@ create index if not exists ACT_IDX_HI_VAR_INST_TENANT_ID on ACT_HI_VARINST(TENAN
 create index if not exists ACT_IDX_HI_VAR_INST_PROC_DEF_KEY on ACT_HI_VARINST(PROC_DEF_KEY_);
 
 create index if not exists ACT_IDX_HI_INCIDENT_TENANT_ID on ACT_HI_INCIDENT(TENANT_ID_);
+create index if not exists ACT_IDX_HI_INCIDENT_PROC_DEF_ID on ACT_HI_INCIDENT(PROC_DEF_ID_);
 create index if not exists ACT_IDX_HI_INCIDENT_PROC_DEF_KEY on ACT_HI_INCIDENT(PROC_DEF_KEY_);
+create index if not exists ACT_IDX_HI_INCIDENT_PROC_INST_ID on ACT_HI_INCIDENT(PROC_INST_ID_);
 
 create index if not exists ACT_IDX_HI_JOB_LOG_PROCINST on ACT_HI_JOB_LOG(PROCESS_INSTANCE_ID_);
 create index if not exists ACT_IDX_HI_JOB_LOG_PROCDEF on ACT_HI_JOB_LOG(PROCESS_DEF_ID_);
 create index if not exists ACT_IDX_HI_JOB_LOG_TENANT_ID on ACT_HI_JOB_LOG(TENANT_ID_);
 create index if not exists ACT_IDX_HI_JOB_LOG_JOB_DEF_ID on ACT_HI_JOB_LOG(JOB_DEF_ID_);
 create index if not exists ACT_IDX_HI_JOB_LOG_PROC_DEF_KEY on ACT_HI_JOB_LOG(PROCESS_DEF_KEY_);
+create index if not exists ACT_IDX_HI_JOB_LOG_DEPLOYMENT_ID on ACT_HI_JOB_LOG(DEPLOYMENT_ID_);
+
+create index if not exists ACT_HI_EXT_TASK_LOG_PROCINST on ACT_HI_EXT_TASK_LOG(PROC_INST_ID_);
+create index if not exists ACT_HI_EXT_TASK_LOG_PROCDEF on ACT_HI_EXT_TASK_LOG(PROC_DEF_ID_);
+create index if not exists ACT_HI_EXT_TASK_LOG_PROC_DEF_KEY on ACT_HI_EXT_TASK_LOG(PROC_DEF_KEY_);
+create index if not exists ACT_HI_EXT_TASK_LOG_TENANT_ID on ACT_HI_EXT_TASK_LOG(TENANT_ID_);
 
 create index if not exists ACT_IDX_HI_OP_LOG_PROCINST on ACT_HI_OP_LOG(PROC_INST_ID_);
 create index if not exists ACT_IDX_HI_OP_LOG_PROCDEF on ACT_HI_OP_LOG(PROC_DEF_ID_);
