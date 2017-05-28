@@ -1,5 +1,5 @@
 -- create decision definition table --
-create table ACT_RE_DECISION_DEF (
+create table if not exists ACT_RE_DECISION_DEF (
   ID_ varchar(64) not null,
   REV_ integer,
   CATEGORY_ varchar(255),
@@ -12,11 +12,12 @@ create table ACT_RE_DECISION_DEF (
   DEC_REQ_ID_ varchar(64),
   DEC_REQ_KEY_ varchar(255),
   TENANT_ID_ varchar(64),
+  HISTORY_TTL_ integer,
   primary key (ID_)
 );
 
 -- create decision requirements definition table --
-create table ACT_RE_DECISION_REQ_DEF (
+create table if not exists ACT_RE_DECISION_REQ_DEF (
   ID_ varchar(64) not null,
   REV_ integer,
   CATEGORY_ varchar(255),
@@ -37,4 +38,8 @@ alter table ACT_RE_DECISION_DEF
 
 create index if not exists ACT_IDX_DEC_DEF_TENANT_ID on ACT_RE_DECISION_DEF(TENANT_ID_);
 create index if not exists ACT_IDX_DEC_DEF_REQ_ID on ACT_RE_DECISION_DEF(DEC_REQ_ID_);
+create index if not exists ACT_IDX_DEC_DEF_DEPLOYMENT_ID on ACT_RE_DECISION_DEF(DEPLOYMENT_ID_);
+create index if not exists ACT_IDX_DEC_DEF_KEY on ACT_RE_DECISION_DEF(KEY_);
+
 create index if not exists ACT_IDX_DEC_REQ_DEF_TENANT_ID on ACT_RE_DECISION_REQ_DEF(TENANT_ID_);
+create index if not exists ACT_IDX_DEC_REQ_DEF_DEPLOYMENT_ID on ACT_RE_DECISION_REQ_DEF(DEPLOYMENT_ID_);

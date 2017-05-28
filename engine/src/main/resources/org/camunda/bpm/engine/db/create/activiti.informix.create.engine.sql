@@ -17,6 +17,9 @@ values ('next.dbid', '1', 1);
 insert into ACT_GE_PROPERTY
 values ('deployment.lock', '0', 1);
 
+insert into ACT_GE_PROPERTY
+values ('history.cleanup.job.lock', '0', 1);
+
 create table if not exists ACT_GE_BYTEARRAY (
   ID_ varchar(64) not null,
   REV_ integer,
@@ -115,6 +118,7 @@ create table if not exists ACT_RE_PROCDEF (
   SUSPENSION_STATE_ integer,
   TENANT_ID_ varchar(64),
   VERSION_TAG_ varchar(64),
+  HISTORY_TTL_ integer,
   primary key (ID_)
 );
 
@@ -184,7 +188,7 @@ create table if not exists ACT_RU_EVENT_SUBSCR (
   EVENT_NAME_ varchar(255),
   EXECUTION_ID_ varchar(64),
   PROC_INST_ID_ varchar(64),
-  ACTIVITY_ID_ varchar(64),
+  ACTIVITY_ID_ varchar(255),
   CONFIGURATION_ varchar(255),
   CREATED_ datetime year to fraction(5) not null,
   TENANT_ID_ varchar(64),
@@ -232,7 +236,7 @@ create table if not exists ACT_RU_FILTER (
   primary key (ID_)
 );
 
-create table ACT_RU_METER_LOG (
+create table if not exists ACT_RU_METER_LOG (
   ID_ varchar(64) not null,
   NAME_ varchar(64) not null,
   REPORTER_ varchar(255),
@@ -242,7 +246,7 @@ create table ACT_RU_METER_LOG (
   primary key (ID_)
 );
 
-create table ACT_RU_EXT_TASK (
+create table if not exists ACT_RU_EXT_TASK (
   ID_ varchar(64) not null,
   REV_ integer not null,
   WORKER_ID_ varchar(255),
@@ -263,7 +267,7 @@ create table ACT_RU_EXT_TASK (
   primary key (ID_)
 );
 
-create table ACT_RU_BATCH (
+create table if not exists ACT_RU_BATCH (
   ID_ varchar(64) not null,
   REV_ integer not null,
   TYPE_ varchar(255),
@@ -282,39 +286,55 @@ create table ACT_RU_BATCH (
 
 create index if not exists ACT_IDX_EXEC_BUSKEY on ACT_RU_EXECUTION(BUSINESS_KEY_);
 create index if not exists ACT_IDX_EXEC_TENANT_ID on ACT_RU_EXECUTION(TENANT_ID_);
+create index if not exists ACT_IDX_EXEC_SUSPENSION_STATE on ACT_RU_EXECUTION(SUSPENSION_STATE_);
+create index if not exists ACT_IDX_EXEC_ACT_ID on ACT_RU_EXECUTION(ACT_ID_);
+create index if not exists ACT_IDX_EXEC_SUPER_CASE_EXEC on ACT_RU_EXECUTION(SUPER_CASE_EXEC_);
+
 create index if not exists ACT_IDX_TASK_CREATE on ACT_RU_TASK(CREATE_TIME_);
 create index if not exists ACT_IDX_TASK_ASSIGNEE on ACT_RU_TASK(ASSIGNEE_);
 create index if not exists ACT_IDX_TASK_TENANT_ID on ACT_RU_TASK(TENANT_ID_);
+create index if not exists ACT_IDX_TASK_PARENT_TASK_ID on ACT_RU_TASK(PARENT_TASK_ID_);
+create index if not exists ACT_IDX_TASK_CASE_INST_ID on ACT_RU_TASK(CASE_INST_ID_);
+
 create index if not exists ACT_IDX_IDENT_LNK_USER on ACT_RU_IDENTITYLINK(USER_ID_);
 create index if not exists ACT_IDX_IDENT_LNK_GROUP on ACT_RU_IDENTITYLINK(GROUP_ID_);
+
 create index if not exists ACT_IDX_EVENT_SUBSCR_CONFIG_ on ACT_RU_EVENT_SUBSCR(CONFIGURATION_);
 create index if not exists ACT_IDX_EVENT_SUBSCR_TENANT_ID on ACT_RU_EVENT_SUBSCR(TENANT_ID_);
+create index if not exists ACT_IDX_EVENT_PROC_INST_ID on ACT_RU_EVENT_SUBSCR(PROC_INST_ID_);
+
 create index if not exists ACT_IDX_VARIABLE_TASK_ID on ACT_RU_VARIABLE(TASK_ID_);
 create index if not exists ACT_IDX_VARIABLE_TENANT_ID on ACT_RU_VARIABLE(TENANT_ID_);
+create index if not exists ACT_IDX_VARIABLE_NAME on ACT_RU_VARIABLE(NAME_);
+
 create index if not exists ACT_IDX_ATHRZ_PROCEDEF  on ACT_RU_IDENTITYLINK(PROC_DEF_ID_);
+
 create index if not exists ACT_IDX_INC_CONFIGURATION on ACT_RU_INCIDENT(CONFIGURATION_);
 create index if not exists ACT_IDX_INC_TENANT_ID on ACT_RU_INCIDENT(TENANT_ID_);
+create index if not exists ACT_IDX_INC_ACTIVITY_ID on ACT_RU_INCIDENT(ACTIVITY_ID_);
 -- CAM-5914
+create index if not exists ACT_IDX_JOB_JOB_DEF_ID on ACT_RU_JOB(JOB_DEF_ID_);
 create index if not exists ACT_IDX_JOB_EXECUTION_ID on ACT_RU_JOB(EXECUTION_ID_);
 -- create index if not exists ACT_IDX_JOB_HANDLER on ACT_RU_JOB(HANDLER_TYPE_, HANDLER_CFG_);
 create index if not exists ACT_IDX_JOB_PROCINST on ACT_RU_JOB(PROCESS_INSTANCE_ID_);
 create index if not exists ACT_IDX_JOB_TENANT_ID on ACT_RU_JOB(TENANT_ID_);
+create index if not exists ACT_IDX_JOB_RETRIES on ACT_RU_JOB(RETRIES_);
+create index if not exists ACT_IDX_JOB_TYPE on ACT_RU_JOB(TYPE_);
+
 create index if not exists ACT_IDX_JOBDEF_TENANT_ID on ACT_RU_JOBDEF(TENANT_ID_);
 
--- new metric milliseconds column
 create index if not exists ACT_IDX_METER_LOG_MS on ACT_RU_METER_LOG(MILLISECONDS_);
 create index if not exists ACT_IDX_METER_LOG_NAME_MS on ACT_RU_METER_LOG(NAME_, MILLISECONDS_);
 create index if not exists ACT_IDX_METER_LOG_REPORT on ACT_RU_METER_LOG(NAME_, REPORTER_, MILLISECONDS_);
-
--- old metric timestamp column
 create index if not exists ACT_IDX_METER_LOG_TIME on ACT_RU_METER_LOG(TIMESTAMP_);
 create index if not exists ACT_IDX_METER_LOG on ACT_RU_METER_LOG(NAME_, TIMESTAMP_);
 
 create index if not exists ACT_IDX_EXT_TASK_TOPIC on ACT_RU_EXT_TASK(TOPIC_NAME_);
 create index if not exists ACT_IDX_EXT_TASK_TENANT_ID on ACT_RU_EXT_TASK(TENANT_ID_);
 create index if not exists ACT_IDX_EXT_TASK_PRIORITY on ACT_RU_EXT_TASK(PRIORITY_);
+create index if not exists ACT_IDX_EXT_TASK_ERR_DETAILS ON ACT_RU_EXT_TASK(ERROR_DETAILS_ID_);
+
 create index if not exists ACT_IDX_AUTH_GROUP_ID on ACT_RU_AUTHORIZATION(GROUP_ID_);
-create index if not exists ACT_IDX_JOB_JOB_DEF_ID on ACT_RU_JOB(JOB_DEF_ID_);
 
 -- indexes for deadlock problems - https://app.camunda.com/jira/browse/CAM-2567 --
 create index if not exists ACT_IDX_INC_CAUSEINCID on ACT_RU_INCIDENT(CAUSE_INCIDENT_ID_);
@@ -325,20 +345,21 @@ create index if not exists ACT_IDX_INC_ROOTCAUSEINCID on ACT_RU_INCIDENT(ROOT_CA
 create index if not exists ACT_IDX_INC_JOB_DEF on ACT_RU_INCIDENT(JOB_DEF_ID_);
 
 -- index for deadlock problem - https://app.camunda.com/jira/browse/CAM-4440 --
-create index ACT_IDX_AUTH_RESOURCE_ID on ACT_RU_AUTHORIZATION(RESOURCE_ID_);
+create index if not exists ACT_IDX_AUTH_RESOURCE_ID on ACT_RU_AUTHORIZATION(RESOURCE_ID_);
 -- index to prevent deadlock on fk constraint - https://app.camunda.com/jira/browse/CAM-5440 --
-create index ACT_IDX_EXT_TASK_EXEC on ACT_RU_EXT_TASK(EXECUTION_ID_);
+create index if not exists ACT_IDX_EXT_TASK_EXEC on ACT_RU_EXT_TASK(EXECUTION_ID_);
 
 -- indexes to improve deployment
-create index ACT_IDX_BYTEARRAY_NAME on ACT_GE_BYTEARRAY(NAME_);
-create index ACT_IDX_DEPLOYMENT_NAME on ACT_RE_DEPLOYMENT(NAME_);
-create index ACT_IDX_DEPLOYMENT_TENANT_ID on ACT_RE_DEPLOYMENT(TENANT_ID_);
-create index ACT_IDX_JOBDEF_PROC_DEF_ID ON ACT_RU_JOBDEF(PROC_DEF_ID_);
-create index ACT_IDX_JOB_HANDLER_TYPE ON ACT_RU_JOB(HANDLER_TYPE_);
-create index ACT_IDX_EVENT_SUBSCR_EVT_NAME ON ACT_RU_EVENT_SUBSCR(EVENT_NAME_);
-create index ACT_IDX_PROCDEF_DEPLOYMENT_ID ON ACT_RE_PROCDEF(DEPLOYMENT_ID_);
-create index ACT_IDX_PROCDEF_TENANT_ID ON ACT_RE_PROCDEF(TENANT_ID_);
-create index ACT_IDX_PROCDEF_VER_TAG ON ACT_RE_PROCDEF(VERSION_TAG_);
+create index if not exists ACT_IDX_BYTEARRAY_NAME on ACT_GE_BYTEARRAY(NAME_);
+create index if not exists ACT_IDX_DEPLOYMENT_NAME on ACT_RE_DEPLOYMENT(NAME_);
+create index if not exists ACT_IDX_DEPLOYMENT_TENANT_ID on ACT_RE_DEPLOYMENT(TENANT_ID_);
+create index if not exists ACT_IDX_JOBDEF_PROC_DEF_ID ON ACT_RU_JOBDEF(PROC_DEF_ID_);
+create index if not exists ACT_IDX_JOB_HANDLER_TYPE ON ACT_RU_JOB(HANDLER_TYPE_);
+create index if not exists ACT_IDX_EVENT_SUBSCR_EVT_NAME ON ACT_RU_EVENT_SUBSCR(EVENT_NAME_);
+create index if not exists ACT_IDX_PROCDEF_DEPLOYMENT_ID ON ACT_RE_PROCDEF(DEPLOYMENT_ID_);
+create index if not exists ACT_IDX_PROCDEF_TENANT_ID ON ACT_RE_PROCDEF(TENANT_ID_);
+create index if not exists ACT_IDX_PROCDEF_VER_TAG ON ACT_RE_PROCDEF(VERSION_TAG_);
+create index if not exists ACT_IDX_PROCDEF_KEY ON ACT_RE_PROCDEF(KEY_);
 
 alter table ACT_GE_BYTEARRAY
   add constraint foreign key (DEPLOYMENT_ID_)
@@ -470,7 +491,6 @@ alter table ACT_RU_BATCH
   references ACT_RU_JOBDEF (ID_)
   constraint ACT_FK_BATCH_JOB_DEF;
 
--- These functions cannot be created atomatically, because every line is terminated by a semicolon and therefore executed seperately. --
 create function if not exists ACT_FCT_USER_ID_OR_ID_(USER_ID_ varchar(255),ID_ varchar(64)) returning varchar(255) with (not variant); return nvl(USER_ID_,ID_); end function;
 create function if not exists ACT_FCT_GROUP_ID_OR_ID_(GROUP_ID_ varchar(255),ID_ varchar(64)) returning varchar(255) with (not variant); return nvl(GROUP_ID_,ID_); end function;
 create function if not exists ACT_FCT_RESOURCE_ID_OR_ID_(RESOURCE_ID_ varchar(64),ID_ varchar(64)) returning varchar(64) with (not variant); return nvl(RESOURCE_ID_,ID_); end function;
