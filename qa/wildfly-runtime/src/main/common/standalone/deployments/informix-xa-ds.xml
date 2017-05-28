@@ -15,22 +15,23 @@
         <xa-datasource-property name="IfxIFXHOST">${database.host}</xa-datasource-property>
         <xa-datasource-property name="PortNumber">${database.port}</xa-datasource-property>
         <xa-datasource-property name="DatabaseName">${database.name}</xa-datasource-property>
-        <xa-datasource-property name="ServerName">sb2000_net</xa-datasource-property>
+        <xa-datasource-property name="ServerName">${database.server}</xa-datasource-property>
         <xa-datasource-property name="IfxLOBCACHE">-1</xa-datasource-property>
         <xa-datasource-property name="IfxIFX_ISOLATION_LEVEL">2U</xa-datasource-property>
+        <xa-datasource-property name="IfxIFX_LOCK_MODE_WAIT">10</xa-datasource-property>
         <xa-datasource-property name="IfxDB_LOCALE">en_us.utf8</xa-datasource-property>
         <xa-datasource-property name="IfxCLIENT_LOCALE">en_us.utf8</xa-datasource-property>
         <security>
             <user-name>${database.username}</user-name>
             <password>${database.password}</password>
         </security>
-        <new-connection-sql>set lock mode to wait 10</new-connection-sql>
         <xa-pool>
             <is-same-rm-override>false</is-same-rm-override>
             <no-tx-separate-pools>true</no-tx-separate-pools>
         </xa-pool>
-        <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
         <validation>
+            <validate-on-match>true</validate-on-match>
+            <check-valid-connection-sql>select 1 from sysmaster:sysdual</check-valid-connection-sql>
             <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.informix.InformixExceptionSorter"/>
         </validation>
         <statement>
