@@ -1,5 +1,5 @@
 -- create history decision instance table --
-create table ACT_HI_DECINST (
+create table if not exists ACT_HI_DECINST (
   ID_ varchar(64) not null,
   DEC_DEF_ID_ varchar(64) not null,
   DEC_DEF_KEY_ varchar(255) not null,
@@ -23,7 +23,7 @@ create table ACT_HI_DECINST (
 );
 
 -- create history decision input table --
-create table ACT_HI_DEC_IN (
+create table if not exists ACT_HI_DEC_IN (
   ID_ varchar(64) not null,
   DEC_INST_ID_ varchar(64) not null,
   CLAUSE_ID_ varchar(64),
@@ -39,7 +39,7 @@ create table ACT_HI_DEC_IN (
 );
 
 -- create history decision output table --
-create table ACT_HI_DEC_OUT (
+create table if not exists ACT_HI_DEC_OUT (
   ID_ varchar(64) not null,
   DEC_INST_ID_ varchar(64) not null,
   CLAUSE_ID_ varchar(64),
