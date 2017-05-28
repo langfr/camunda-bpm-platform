@@ -1,5 +1,4 @@
 -- create case definition table --
-
 create table if not exists ACT_RE_CASE_DEF (
   ID_ varchar(64) not null,
   REV_ integer,
@@ -11,11 +10,11 @@ create table if not exists ACT_RE_CASE_DEF (
   RESOURCE_NAME_ lvarchar(4000),
   DGRM_RESOURCE_NAME_ lvarchar(4000),
   TENANT_ID_ varchar(64),
+  HISTORY_TTL_ integer,
   primary key (ID_)
 );
 
 -- create case execution table --
-
 create table if not exists ACT_RU_CASE_EXECUTION (
   ID_ varchar(64) not null,
   REV_ integer,
@@ -34,7 +33,6 @@ create table if not exists ACT_RU_CASE_EXECUTION (
 );
 
 -- create case sentry part table --
-
 create table if not exists ACT_RU_CASE_SENTRY_PART (
   ID_ varchar(64) not null,
   REV_ integer,
@@ -52,10 +50,11 @@ create table if not exists ACT_RU_CASE_SENTRY_PART (
   primary key (ID_)
 );
 
--- create index on business key --
 create index if not exists ACT_IDX_CASE_EXEC_BUSKEY on ACT_RU_CASE_EXECUTION(BUSINESS_KEY_);
+create index if not exists ACT_IDX_CASE_EXEC_ACT_ID on ACT_RU_CASE_EXECUTION(ACT_ID_);
+create index if not exists ACT_IDX_CASE_EXEC_SUPER_CASE_EXEC on ACT_RU_CASE_EXECUTION(SUPER_CASE_EXEC_);
+create index if not exists ACT_IDX_CASE_EXEC_TENANT_ID on ACT_RU_CASE_EXECUTION(TENANT_ID_);
 
--- create foreign key constraints on ACT_RU_CASE_EXECUTION --
 alter table ACT_RU_CASE_EXECUTION
   add constraint foreign key (CASE_INST_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
@@ -81,7 +80,6 @@ alter table ACT_RU_VARIABLE
   references ACT_RU_CASE_EXECUTION(ID_)
 	constraint ACT_FK_VAR_CASE_INST;
 
--- create foreign key constraints on ACT_RU_TASK --
 alter table ACT_RU_TASK
   add constraint foreign key (CASE_EXECUTION_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
@@ -92,7 +90,6 @@ alter table ACT_RU_TASK
   references ACT_RE_CASE_DEF(ID_)
   constraint ACT_FK_TASK_CASE_DEF;
 
--- create foreign key constraints on ACT_RU_CASE_SENTRY_PART --
 alter table ACT_RU_CASE_SENTRY_PART
   add constraint foreign key (CASE_INST_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
@@ -104,4 +101,5 @@ alter table ACT_RU_CASE_SENTRY_PART
   constraint ACT_FK_CASE_SENTRY_CASE_EXEC;
 
 create index if not exists ACT_IDX_CASE_DEF_TENANT_ID on ACT_RE_CASE_DEF(TENANT_ID_);
-create index if not exists ACT_IDX_CASE_EXEC_TENANT_ID on ACT_RU_CASE_EXECUTION(TENANT_ID_);
+create index if not exists ACT_IDX_CASE_DEF_DEPLOYMENT_ID on ACT_RE_CASE_DEF(DEPLOYMENT_ID_);
+create index if not exists ACT_IDX_CASE_DEF_KEY on ACT_RE_CASE_DEF(KEY_);
