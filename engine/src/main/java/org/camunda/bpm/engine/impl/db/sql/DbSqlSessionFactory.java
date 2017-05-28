@@ -738,6 +738,10 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificIfNull.put(INFORMIX, "NVL");
 
     addDatabaseSpecificStatement(INFORMIX, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
+    addDatabaseSpecificStatement(INFORMIX, "selectHistoricProcessInstanceIdsForCleanup", "selectHistoricProcessInstanceIdsForCleanup_informix");
+    addDatabaseSpecificStatement(INFORMIX, "selectHistoricProcessInstanceIdsForCleanupCount", "selectHistoricProcessInstanceIdsForCleanupCount_informix");
+    addDatabaseSpecificStatement(INFORMIX, "selectHistoricDecisionInstanceIdsForCleanup", "selectHistoricDecisionInstanceIdsForCleanup_informix" );
+    addDatabaseSpecificStatement(INFORMIX, "selectHistoricCaseInstanceIdsForCleanup", "selectHistoricCaseInstanceIdsForCleanup_informix" );
 
     constants = new HashMap<String, String>();
     constants.put("constant.event", "'event'");
