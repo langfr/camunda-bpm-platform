@@ -743,7 +743,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTestCase {
     assertTrue(createTimeIndex >= 0);
 
     assertOneOf(new String[]{"VARCHAR", "NVARCHAR2", "nvarchar", "NVARCHAR"}, tableMetaData.getColumnTypes().get(assigneeIndex));
-    assertOneOf(new String[]{"TIMESTAMP", "TIMESTAMP(6)", "datetime", "DATETIME", "DATETIME2"}, tableMetaData.getColumnTypes().get(createTimeIndex));
+    assertOneOf(new String[]{"TIMESTAMP", "TIMESTAMP(6)", "datetime", "DATETIME", "DATETIME2", "DATETIME YEAR TO FRACTION(5)"}, tableMetaData.getColumnTypes().get(createTimeIndex));
   }
 
   private void assertOneOf(String[] possibleValues, String currentValue) {

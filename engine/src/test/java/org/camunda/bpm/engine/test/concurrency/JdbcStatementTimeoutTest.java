@@ -45,7 +45,7 @@ public class JdbcStatementTimeoutTest extends ConcurrencyTestCase {
   protected void runTest() throws Throwable {
     String databaseType = DatabaseHelper.getDatabaseType(processEngineConfiguration);
 
-    if ((DbSqlSessionFactory.DB2.equals(databaseType) || DbSqlSessionFactory.MARIADB.equals(databaseType))
+    if ((DbSqlSessionFactory.DB2.equals(databaseType) || DbSqlSessionFactory.MARIADB.equals(databaseType) || DbSqlSessionFactory.INFORMIX.equals(databaseType))
       && processEngine.getProcessEngineConfiguration().isJdbcBatchProcessing()) {
       // skip test method - if database is DB2 and MariaDB and Batch mode on
     } else {
