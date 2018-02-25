@@ -1,5 +1,5 @@
 -- create history decision instance table --
-create table if not exists ACT_HI_DECINST (
+create table ACT_HI_DECINST (
   ID_ varchar(64) not null,
   DEC_DEF_ID_ varchar(64) not null,
   DEC_DEF_KEY_ varchar(255) not null,
@@ -23,7 +23,7 @@ create table if not exists ACT_HI_DECINST (
 );
 
 -- create history decision input table --
-create table if not exists ACT_HI_DEC_IN (
+create table ACT_HI_DEC_IN (
   ID_ varchar(64) not null,
   DEC_INST_ID_ varchar(64) not null,
   CLAUSE_ID_ varchar(64),
@@ -39,7 +39,7 @@ create table if not exists ACT_HI_DEC_IN (
 );
 
 -- create history decision output table --
-create table if not exists ACT_HI_DEC_OUT (
+create table ACT_HI_DEC_OUT (
   ID_ varchar(64) not null,
   DEC_INST_ID_ varchar(64) not null,
   CLAUSE_ID_ varchar(64),
@@ -58,20 +58,20 @@ create table if not exists ACT_HI_DEC_OUT (
 );
 
 
-create index if not exists ACT_IDX_HI_DEC_INST_ID on ACT_HI_DECINST(DEC_DEF_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_KEY on ACT_HI_DECINST(DEC_DEF_KEY_);
-create index if not exists ACT_IDX_HI_DEC_INST_PI on ACT_HI_DECINST(PROC_INST_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_CI on ACT_HI_DECINST(CASE_INST_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_ACT on ACT_HI_DECINST(ACT_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_ACT_INST on ACT_HI_DECINST(ACT_INST_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_TIME on ACT_HI_DECINST(EVAL_TIME_);
-create index if not exists ACT_IDX_HI_DEC_INST_TENANT_ID on ACT_HI_DECINST(TENANT_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_ROOT_ID on ACT_HI_DECINST(ROOT_DEC_INST_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_REQ_ID on ACT_HI_DECINST(DEC_REQ_ID_);
-create index if not exists ACT_IDX_HI_DEC_INST_REQ_KEY on ACT_HI_DECINST(DEC_REQ_KEY_);
+create index ACT_IDX_HI_DEC_INST_ID on ACT_HI_DECINST(DEC_DEF_ID_);
+create index ACT_IDX_HI_DEC_INST_KEY on ACT_HI_DECINST(DEC_DEF_KEY_);
+create index ACT_IDX_HI_DEC_INST_PI on ACT_HI_DECINST(PROC_INST_ID_);
+create index ACT_IDX_HI_DEC_INST_CI on ACT_HI_DECINST(CASE_INST_ID_);
+create index ACT_IDX_HI_DEC_INST_ACT on ACT_HI_DECINST(ACT_ID_);
+create index ACT_IDX_HI_DEC_INST_ACT_INST on ACT_HI_DECINST(ACT_INST_ID_);
+create index ACT_IDX_HI_DEC_INST_TIME on ACT_HI_DECINST(EVAL_TIME_);
+create index ACT_IDX_HI_DEC_INST_TENANT_ID on ACT_HI_DECINST(TENANT_ID_);
+create index ACT_IDX_HI_DEC_INST_ROOT_ID on ACT_HI_DECINST(ROOT_DEC_INST_ID_);
+create index ACT_IDX_HI_DEC_INST_REQ_ID on ACT_HI_DECINST(DEC_REQ_ID_);
+create index ACT_IDX_HI_DEC_INST_REQ_KEY on ACT_HI_DECINST(DEC_REQ_KEY_);
 
-create index if not exists ACT_IDX_HI_DEC_IN_INST on ACT_HI_DEC_IN(DEC_INST_ID_);
-create index if not exists ACT_IDX_HI_DEC_IN_CLAUSE on ACT_HI_DEC_IN(DEC_INST_ID_, CLAUSE_ID_);
+create index ACT_IDX_HI_DEC_IN_INST on ACT_HI_DEC_IN(DEC_INST_ID_);
+create index ACT_IDX_HI_DEC_IN_CLAUSE on ACT_HI_DEC_IN(DEC_INST_ID_, CLAUSE_ID_);
 
-create index if not exists ACT_IDX_HI_DEC_OUT_INST on ACT_HI_DEC_OUT(DEC_INST_ID_);
-create index if not exists ACT_IDX_HI_DEC_OUT_RULE on ACT_HI_DEC_OUT(RULE_ORDER_, CLAUSE_ID_);
+create index ACT_IDX_HI_DEC_OUT_INST on ACT_HI_DEC_OUT(DEC_INST_ID_);
+create index ACT_IDX_HI_DEC_OUT_RULE on ACT_HI_DEC_OUT(RULE_ORDER_, CLAUSE_ID_);
