@@ -717,14 +717,18 @@ public class DbSqlSessionFactory implements SessionFactory {
     dbSpecificConstants.put(MSSQL, constants);
 
     // informix
-    databaseSpecificLimitBeforeStatements.put(INFORMIX, "SELECT SKIP #{firstResult} FIRST #{maxResults} * FROM (");
+    databaseSpecificLimitBeforeStatements.put(INFORMIX, "SELECT SKIP ${firstResult} FIRST ${maxResults} * FROM (");
     databaseSpecificLimitAfterStatements.put(INFORMIX, ")");
     databaseSpecificInnerLimitAfterStatements.put(INFORMIX, databaseSpecificLimitAfterStatements.get(INFORMIX));
     databaseSpecificLimitBetweenStatements.put(INFORMIX, "");
     databaseSpecificLimitBetweenFilterStatements.put(INFORMIX, "");
+    databaseSpecificLimitBeforeWithoutOffsetStatements.put(INFORMIX, "FIRST ${maxResults}");
+    databaseSpecificLimitAfterWithoutOffsetStatements.put(INFORMIX, "");
     databaseSpecificOrderByStatements.put(INFORMIX, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatements.put(INFORMIX, "");
     databaseSpecificDistinct.put(INFORMIX, "distinct");
+
+    databaseSpecificEscapeChar.put(INFORMIX, defaultEscapeChar);
 
     databaseSpecificBitAnd1.put(INFORMIX, "BITAND(");
     databaseSpecificBitAnd2.put(INFORMIX, ",");
@@ -737,19 +741,18 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificFalseConstant.put(INFORMIX, "'f'");
     databaseSpecificIfNull.put(INFORMIX, "NVL");
 
+    databaseSpecificDaysComparator.put(INFORMIX, "(DATE(#{currentTimestamp}) - DATE(${date})) >= ${days}");
+
     addDatabaseSpecificStatement(INFORMIX, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
-    addDatabaseSpecificStatement(INFORMIX, "selectHistoricProcessInstanceIdsForCleanup", "selectHistoricProcessInstanceIdsForCleanup_informix");
-    addDatabaseSpecificStatement(INFORMIX, "selectHistoricProcessInstanceIdsForCleanupCount", "selectHistoricProcessInstanceIdsForCleanupCount_informix");
-    addDatabaseSpecificStatement(INFORMIX, "selectHistoricDecisionInstanceIdsForCleanup", "selectHistoricDecisionInstanceIdsForCleanup_informix" );
-    addDatabaseSpecificStatement(INFORMIX, "selectHistoricCaseInstanceIdsForCleanup", "selectHistoricCaseInstanceIdsForCleanup_informix" );
 
     constants = new HashMap<String, String>();
     constants.put("constant.event", "'event'");
     constants.put("constant.op_message", "NEW_VALUE_ || '_|_' || PROPERTY_");
-    constants.put("constant.for.update", "for update");
+    constants.put("constant_for_update", "for update");
     constants.put("constant.datepart.quarter", "QUARTER");
     constants.put("constant.datepart.month", "MONTH");
     constants.put("constant.null.startTime", "null START_TIME_");
+    constants.put("constant.varchar.cast", "'${key}'");
     dbSpecificConstants.put(INFORMIX, constants);
   }
 
