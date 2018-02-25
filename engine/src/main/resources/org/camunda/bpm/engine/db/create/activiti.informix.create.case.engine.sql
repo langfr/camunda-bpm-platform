@@ -1,5 +1,6 @@
 -- create case definition table --
-create table if not exists ACT_RE_CASE_DEF (
+
+create table ACT_RE_CASE_DEF (
   ID_ varchar(64) not null,
   REV_ integer,
   CATEGORY_ varchar(255),
@@ -15,7 +16,8 @@ create table if not exists ACT_RE_CASE_DEF (
 );
 
 -- create case execution table --
-create table if not exists ACT_RU_CASE_EXECUTION (
+
+create table ACT_RU_CASE_EXECUTION (
   ID_ varchar(64) not null,
   REV_ integer,
   CASE_INST_ID_ varchar(64),
@@ -33,7 +35,8 @@ create table if not exists ACT_RU_CASE_EXECUTION (
 );
 
 -- create case sentry part table --
-create table if not exists ACT_RU_CASE_SENTRY_PART (
+
+create table ACT_RU_CASE_SENTRY_PART (
   ID_ varchar(64) not null,
   REV_ integer,
   CASE_INST_ID_ varchar(64),
@@ -50,40 +53,39 @@ create table if not exists ACT_RU_CASE_SENTRY_PART (
   primary key (ID_)
 );
 
-create index if not exists ACT_IDX_CASE_EXEC_BUSKEY on ACT_RU_CASE_EXECUTION(BUSINESS_KEY_);
-create index if not exists ACT_IDX_CASE_EXEC_ACT_ID on ACT_RU_CASE_EXECUTION(ACT_ID_);
-create index if not exists ACT_IDX_CASE_EXEC_SUPER_CASE_EXEC on ACT_RU_CASE_EXECUTION(SUPER_CASE_EXEC_);
-create index if not exists ACT_IDX_CASE_EXEC_TENANT_ID on ACT_RU_CASE_EXECUTION(TENANT_ID_);
+-- create index on business key --
+create index ACT_IDX_CASE_EXEC_BUSKEY on ACT_RU_CASE_EXECUTION(BUSINESS_KEY_);
 
+-- create foreign key constraints on ACT_RU_CASE_EXECUTION --
 alter table ACT_RU_CASE_EXECUTION
   add constraint foreign key (CASE_INST_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
-	constraint ACT_FK_CASE_EXE_CASE_INST;
+  constraint ACT_FK_CASE_EXE_CASE_INST;
 
 alter table ACT_RU_CASE_EXECUTION
   add constraint foreign key (PARENT_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
-	constraint ACT_FK_CASE_EXE_PARENT;
+  constraint ACT_FK_CASE_EXE_PARENT;
 
 alter table ACT_RU_CASE_EXECUTION
   add constraint foreign key (CASE_DEF_ID_)
   references ACT_RE_CASE_DEF(ID_)
-	constraint ACT_FK_CASE_EXE_CASE_DEF;
+  constraint ACT_FK_CASE_EXE_CASE_DEF;
 
 alter table ACT_RU_VARIABLE
   add constraint foreign key (CASE_EXECUTION_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
-	constraint ACT_FK_VAR_CASE_EXE;
+  constraint ACT_FK_VAR_CASE_EXE;
 
 alter table ACT_RU_VARIABLE
   add constraint foreign key (CASE_INST_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
-	constraint ACT_FK_VAR_CASE_INST;
+  constraint ACT_FK_VAR_CASE_INST;
 
 alter table ACT_RU_TASK
   add constraint foreign key (CASE_EXECUTION_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
-	constraint ACT_FK_TASK_CASE_EXE;
+  constraint ACT_FK_TASK_CASE_EXE;
 
 alter table ACT_RU_TASK
   add constraint foreign key (CASE_DEF_ID_)
@@ -93,13 +95,24 @@ alter table ACT_RU_TASK
 alter table ACT_RU_CASE_SENTRY_PART
   add constraint foreign key (CASE_INST_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
-	constraint ACT_FK_CASE_SENTRY_CASE_INST;
+  constraint ACT_FK_CASE_SENTRY_CASE_INST;
 
 alter table ACT_RU_CASE_SENTRY_PART
   add constraint foreign key (CASE_EXEC_ID_)
   references ACT_RU_CASE_EXECUTION(ID_)
   constraint ACT_FK_CASE_SENTRY_CASE_EXEC;
 
-create index if not exists ACT_IDX_CASE_DEF_TENANT_ID on ACT_RE_CASE_DEF(TENANT_ID_);
-create index if not exists ACT_IDX_CASE_DEF_DEPLOYMENT_ID on ACT_RE_CASE_DEF(DEPLOYMENT_ID_);
-create index if not exists ACT_IDX_CASE_DEF_KEY on ACT_RE_CASE_DEF(KEY_);
+-- indexes for concurrency problems - https://app.camunda.com/jira/browse/CAM-1646 --
+-- create index ACT_IDX_CASE_EXEC_CASE on ACT_RU_CASE_EXECUTION(CASE_DEF_ID_);
+-- create index ACT_IDX_CASE_EXEC_PARENT on ACT_RU_CASE_EXECUTION(PARENT_ID_);
+-- create index ACT_IDX_VARIABLE_CASE_EXEC on ACT_RU_VARIABLE(CASE_EXECUTION_ID_);
+-- create index ACT_IDX_VARIABLE_CASE_INST on ACT_RU_VARIABLE(CASE_INST_ID_);
+-- create index ACT_IDX_TASK_CASE_EXEC on ACT_RU_TASK(CASE_EXECUTION_ID_);
+-- create index ACT_IDX_TASK_CASE_DEF_ID on ACT_RU_TASK(CASE_DEF_ID_);
+
+-- add indexes for ACT_RU_CASE_SENTRY_PART --
+-- create index ACT_IDX_CASE_SENTRY_CASE_INST on ACT_RU_CASE_SENTRY_PART(CASE_INST_ID_);
+-- create index ACT_IDX_CASE_SENTRY_CASE_EXEC on ACT_RU_CASE_SENTRY_PART(CASE_EXEC_ID_);
+
+create index ACT_IDX_CASE_DEF_TENANT_ID on ACT_RE_CASE_DEF(TENANT_ID_);
+create index ACT_IDX_CASE_EXEC_TENANT_ID on ACT_RU_CASE_EXECUTION(TENANT_ID_);

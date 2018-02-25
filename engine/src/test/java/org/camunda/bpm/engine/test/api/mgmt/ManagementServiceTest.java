@@ -924,7 +924,7 @@ public class ManagementServiceTest extends PluggableProcessEngineTest {
     assertThat(createTimeIndex >= 0).isTrue();
 
     assertThat(tableMetaData.getColumnTypes().get(assigneeIndex)).isIn("CHARACTER VARYING", "VARCHAR", "NVARCHAR2", "nvarchar", "NVARCHAR");
-    assertThat(tableMetaData.getColumnTypes().get(createTimeIndex)).isIn("TIMESTAMP", "TIMESTAMP(6)", "datetime", "DATETIME", "DATETIME2");
+    assertThat(tableMetaData.getColumnTypes().get(createTimeIndex)).isIn("TIMESTAMP", "TIMESTAMP(6)", "datetime", "DATETIME", "DATETIME2", "DATETIME YEAR TO FRACTION(5)");
   }
 
   private void assertOneOf(String[] possibleValues, String currentValue) {

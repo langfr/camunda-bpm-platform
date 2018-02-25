@@ -1,2 +1,2 @@
-drop table if exists ACT_HI_CASEINST;
-drop table if exists ACT_HI_CASEACTINST;
+drop table ACT_HI_CASEINST;
+drop table ACT_HI_CASEACTINST;

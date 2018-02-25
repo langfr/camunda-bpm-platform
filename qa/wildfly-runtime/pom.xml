@@ -39,7 +39,7 @@
     </dependency>
     <dependency>
       <groupId>com.ibm.informix.jdbc</groupId>
-      <artifactId>ifxjdbc_all</artifactId>
+      <artifactId>ifxjdbc</artifactId>
       <scope>runtime</scope>
     </dependency>
 
