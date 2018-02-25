@@ -22,10 +22,10 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.1" name="com.ibm.informix.jdbc.ifxjdbc_all">
+<module xmlns="urn:jboss:module:1.1" name="com.ibm.informix.jdbc.ifxjdbc">
 
     <resources>
-        <resource-root path="ifxjdbc_all-@version.informix@.jar"/>
+        <resource-root path="ifxjdbc-@version.informix@.jar"/>
         <!-- Insert resources here -->
     </resources>
     <dependencies>
