@@ -17,3 +17,4 @@ drop table ACT_RU_EXT_TASK;
 drop table ACT_RU_BATCH;
 
 drop function ACT_FCT_RESOURCE_ID_OR_ID_;
+drop function MINUTE;

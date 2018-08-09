@@ -205,7 +205,11 @@ public class ExceptionUtil {
         "23503".equals(sqlState) && errorCode == -530 ||
         "23504".equals(sqlState) && errorCode == -532 ||
         // PostgreSQL
-        "23503".equals(sqlState) && errorCode == 0;
+        "23503".equals(sqlState) && errorCode == 0 ||
+        // Informix
+        message.contains("referential constraint") ||
+        "23000".equals(sqlState) && errorCode == -691;
+    }
   }
 
   public static boolean checkVariableIntegrityViolation(PersistenceException persistenceException) {
@@ -228,7 +232,10 @@ public class ExceptionUtil {
         // Oracle
         || (message.contains("act_uniq_variable") && "23000".equals(sqlState) && errorCode == 1)
         // H2
-        || (message.contains("act_uniq_variable") && "23505".equals(sqlState) && errorCode == 23505);
+        || (message.contains("act_uniq_variable") && "23505".equals(sqlState) && errorCode == 23505)
+        // Informix
+        || (message.contains("act_uniq_variable") && "23000".equals(sqlState) && errorCode == -239)
+	;
   }
 
   public static boolean checkCrdbTransactionRetryException(Throwable exception) {
@@ -242,7 +249,6 @@ public class ExceptionUtil {
 
     } else {
       return false;
-
     }
 
     if (sqlException == null) {
@@ -274,7 +280,8 @@ public class ExceptionUtil {
     ORACLE(60, "61000"),
     POSTGRES(0, "40P01"),
     CRDB(0, "40001"),
-    H2(40001, "40001");
+    H2(40001, "40001"),
+    INFORMIX(-143, "40001");
 
     protected final int errorCode;
     protected final String sqlState;
@@ -314,7 +321,8 @@ public class ExceptionUtil {
         ORACLE.equals(errorCode, sqlState) ||
         POSTGRES.equals(errorCode, sqlState) ||
         CRDB.equals(errorCode, sqlState) ||
-        H2.equals(errorCode, sqlState);
+        H2.equals(errorCode, sqlState) ||
+        INFORMIX.equals(errorCode, sqlState);
   }
 
   public static BatchExecutorException findBatchExecutorException(PersistenceException exception) {

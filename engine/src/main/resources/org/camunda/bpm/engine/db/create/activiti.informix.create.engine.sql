@@ -122,6 +122,7 @@ create table ACT_RE_PROCDEF (
   TENANT_ID_ varchar(64),
   VERSION_TAG_ varchar(64),
   HISTORY_TTL_ integer,
+  STARTABLE_ boolean not null default 't',
   primary key (ID_)
 );
 
@@ -498,3 +499,5 @@ create index ACT_IDX_EVENT_SUBSCR_EVT_NAME on ACT_RU_EVENT_SUBSCR(EVENT_NAME_);
 create index ACT_IDX_PROCDEF_DEPLOYMENT_ID on ACT_RE_PROCDEF(DEPLOYMENT_ID_);
 create index ACT_IDX_PROCDEF_TENANT_ID on ACT_RE_PROCDEF(TENANT_ID_);
 create index ACT_IDX_PROCDEF_VER_TAG on ACT_RE_PROCDEF(VERSION_TAG_);
+
+create function MINUTE ( param1 datetime year to fraction ) returning integer; define rv integer; select to_char(param1, "%M" )::int into rv from sysmaster:sysdual; return rv; end function;

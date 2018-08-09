@@ -6,11 +6,13 @@ create table ACT_HI_PROCINST (
   PROC_DEF_ID_ varchar(64) not null,
   START_TIME_ datetime year to fraction(5) not null,
   END_TIME_ datetime year to fraction(5),
+  REMOVAL_TIME_ datetime year to fraction(5),
   DURATION_ bigint,
   START_USER_ID_ varchar(255),
   START_ACT_ID_ varchar(255),
   END_ACT_ID_ varchar(255),
   SUPER_PROCESS_INSTANCE_ID_ varchar(64),
+  ROOT_PROCESS_INSTANCE_ID_ varchar(64),
   SUPER_CASE_INSTANCE_ID_ varchar(64),
   CASE_INST_ID_ varchar(64),
   DELETE_REASON_ lvarchar(4000),
@@ -86,6 +88,7 @@ create table ACT_HI_VARINST (
   TASK_ID_ varchar(64),
   NAME_ varchar(255) not null,
   VAR_TYPE_ varchar(100),
+  CREATE_TIME_ datetime year to fraction(5),
   REV_ integer,
   BYTEARRAY_ID_ varchar(64),
   DOUBLE_ double precision,
@@ -167,6 +170,7 @@ create table ACT_HI_ATTACHMENT (
   URL_ lvarchar(4000),
   CONTENT_ID_ varchar(64),
   TENANT_ID_ varchar(64),
+  CREATE_TIME_ datetime year to fraction(5),
   primary key (ID_)
 );
 
@@ -250,30 +254,31 @@ create table ACT_HI_BATCH (
   MONITOR_JOB_DEF_ID_ varchar(64),
   BATCH_JOB_DEF_ID_ varchar(64),
   TENANT_ID_  varchar(64),
+  CREATE_USER_ID_ varchar(255),
   START_TIME_ datetime year to fraction(5) not null,
   END_TIME_ datetime year to fraction(5),
   primary key (ID_)
 );
 
 create table ACT_HI_EXT_TASK_LOG (
-    ID_ varchar(64) not null,
-    TIMESTAMP_ datetime year to fraction(5) not null,
-    EXT_TASK_ID_ varchar(64) not null,
-    RETRIES_ integer,
-    TOPIC_NAME_ varchar(255),
-    WORKER_ID_ varchar(255),
-    PRIORITY_ bigint not null default 0,
-    ERROR_MSG_ lvarchar(4000),
-    ERROR_DETAILS_ID_ varchar(64),
-    ACT_ID_ varchar(255),
-    ACT_INST_ID_ varchar(64),
-    EXECUTION_ID_ varchar(64),
-    PROC_INST_ID_ varchar(64),
-    PROC_DEF_ID_ varchar(64),
-    PROC_DEF_KEY_ varchar(255),
-    TENANT_ID_ varchar(64),
-    STATE_ integer,
-    primary key (ID_)
+  ID_ varchar(64) not null,
+  TIMESTAMP_ datetime year to fraction(5) not null,
+  EXT_TASK_ID_ varchar(64) not null,
+  RETRIES_ integer,
+  TOPIC_NAME_ varchar(255),
+  WORKER_ID_ varchar(255),
+  PRIORITY_ bigint not null default 0,
+  ERROR_MSG_ lvarchar(4000),
+  ERROR_DETAILS_ID_ varchar(64),
+  ACT_ID_ varchar(255),
+  ACT_INST_ID_ varchar(64),
+  EXECUTION_ID_ varchar(64),
+  PROC_INST_ID_ varchar(64),
+  PROC_DEF_ID_ varchar(64),
+  PROC_DEF_KEY_ varchar(255),
+  TENANT_ID_ varchar(64),
+  STATE_ integer,
+  primary key (ID_)
 );
 
 create index ACT_IDX_HI_PRO_INST_END on ACT_HI_PROCINST(END_TIME_);
@@ -281,6 +286,9 @@ create index ACT_IDX_HI_PRO_I_BUSKEY on ACT_HI_PROCINST(BUSINESS_KEY_);
 create index ACT_IDX_HI_PRO_INST_TENANT_ID on ACT_HI_PROCINST(TENANT_ID_);
 create index ACT_IDX_HI_PRO_INST_PROC_DEF_KEY on ACT_HI_PROCINST(PROC_DEF_KEY_);
 create index ACT_IDX_HI_PRO_INST_PROC_TIME on ACT_HI_PROCINST(START_TIME_, END_TIME_);
+create index ACT_IDX_HI_PI_PDEFID_END_TIME on ACT_HI_PROCINST(PROC_DEF_ID_, END_TIME_);
+create index ACT_IDX_HI_PRO_INST_ROOT_PI on ACT_HI_PROCINST(ROOT_PROCESS_INSTANCE_ID_);
+create index ACT_IDX_HI_PRO_INST_RM_TIME on ACT_HI_PROCINST(REMOVAL_TIME_);
 
 create index ACT_IDX_HI_ACT_INST_START on ACT_HI_ACTINST(START_TIME_);
 create index ACT_IDX_HI_ACT_INST_END on ACT_HI_ACTINST(END_TIME_);
@@ -289,6 +297,7 @@ create index ACT_IDX_HI_ACT_INST_COMP on ACT_HI_ACTINST(EXECUTION_ID_, ACT_ID_, 
 create index ACT_IDX_HI_ACT_INST_STATS on ACT_HI_ACTINST(PROC_DEF_ID_, PROC_INST_ID_, ACT_ID_); --, END_TIME_, ACT_INST_STATE_);
 create index ACT_IDX_HI_ACT_INST_TENANT_ID on ACT_HI_ACTINST(TENANT_ID_);
 create index ACT_IDX_HI_ACT_INST_PROC_DEF_KEY on ACT_HI_ACTINST(PROC_DEF_KEY_);
+create index ACT_IDX_HI_AI_PDEFID_END_TIME on ACT_HI_ACTINST(PROC_DEF_ID_, END_TIME_);
 
 create index ACT_IDX_HI_TASK_INST_TENANT_ID on ACT_HI_TASKINST(TENANT_ID_);
 create index ACT_IDX_HI_TASK_INST_PROC_DEF_KEY on ACT_HI_TASKINST(PROC_DEF_KEY_);
@@ -338,6 +347,7 @@ create index ACT_IDX_HI_EXTTASKLOG_ERRORDET on ACT_HI_EXT_TASK_LOG(ERROR_DETAILS
 
 create index ACT_IDX_HI_OP_LOG_PROCINST on ACT_HI_OP_LOG(PROC_INST_ID_);
 create index ACT_IDX_HI_OP_LOG_PROCDEF on ACT_HI_OP_LOG(PROC_DEF_ID_);
+create index ACT_IDX_HI_OP_LOG_TASK on ACT_HI_OP_LOG(TASK_ID_);
 
 create index ACT_IDX_HI_ATTACHMENT_CONTENT on ACT_HI_ATTACHMENT(CONTENT_ID_);
 create index ACT_IDX_HI_ATTACHMENT_PROCINST on ACT_HI_ATTACHMENT(PROC_INST_ID_);

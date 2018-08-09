@@ -35,6 +35,7 @@ create table ACT_HI_DEC_IN (
   TEXT_ lvarchar(4000),
   TEXT2_ lvarchar(4000),
   TENANT_ID_ varchar(64),
+  CREATE_TIME_ datetime year to fraction(5),
   primary key (ID_)
 );
 
@@ -54,6 +55,7 @@ create table ACT_HI_DEC_OUT (
   TEXT_ lvarchar(4000),
   TEXT2_ lvarchar(4000),
   TENANT_ID_ varchar(64),
+  CREATE_TIME_ datetime year to fraction(5),
   primary key (ID_)
 );
 
