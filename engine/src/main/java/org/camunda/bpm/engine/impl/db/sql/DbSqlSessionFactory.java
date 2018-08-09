@@ -597,8 +597,10 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     // informix
     databaseSpecificLimitBeforeStatements.put(INFORMIX, "SELECT SKIP ${firstResult} FIRST ${maxResults} * FROM (");
+    optimizeDatabaseSpecificLimitBeforeWithoutOffsetStatements.put(INFORMIX, "");
     databaseSpecificLimitAfterStatements.put(INFORMIX, ")");
     databaseSpecificInnerLimitAfterStatements.put(INFORMIX, databaseSpecificLimitAfterStatements.get(INFORMIX));
+    optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(INFORMIX, "");
     databaseSpecificLimitBetweenStatements.put(INFORMIX, "");
     databaseSpecificLimitBetweenFilterStatements.put(INFORMIX, "");
     databaseSpecificLimitBeforeWithoutOffsetStatements.put(INFORMIX, "FIRST ${maxResults}");
@@ -620,7 +622,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     databaseSpecificFalseConstant.put(INFORMIX, "'f'");
     databaseSpecificIfNull.put(INFORMIX, "NVL");
 
-    databaseSpecificDaysComparator.put(INFORMIX, "(DATE(#{currentTimestamp}) - DATE(${date})) >= ${days}");
+    databaseSpecificDaysComparator.put(INFORMIX, "DATE(${date}) + ${days} <= #{currentTimestamp}");
 
     addDatabaseSpecificStatement(INFORMIX, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
 
@@ -630,6 +632,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant_for_update", "for update");
     constants.put("constant.datepart.quarter", "QUARTER");
     constants.put("constant.datepart.month", "MONTH");
+    constants.put("constant.datepart.minute", "MINUTE");
     constants.put("constant.null.startTime", "null START_TIME_");
     constants.put("constant.varchar.cast", "'${key}'");
     dbSpecificConstants.put(INFORMIX, constants);
