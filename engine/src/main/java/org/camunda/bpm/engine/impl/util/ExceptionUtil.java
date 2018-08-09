@@ -149,6 +149,9 @@ public class ExceptionUtil {
         || (exception.getMessage().toLowerCase().contains("sqlstate=23503") && exception.getMessage().toLowerCase().contains("sqlcode=-530"))
         // DB2 zOS
         || ("23503".equals(exception.getSQLState()) && exception.getErrorCode() == -530)
+        // Informix
+        || (exception.getMessage().toLowerCase().contains("referential constraint")
+          || ("23000".equals(exception.getSQLState()) && exception.getErrorCode() == -691))
         ) {
 
         return true;
@@ -172,7 +175,9 @@ public class ExceptionUtil {
         // Oracle
         || (exception.getMessage().toLowerCase().contains("act_uniq_variable") && "23000".equals(exception.getSQLState()) && exception.getErrorCode() == 1)
         // H2
-        || (exception.getMessage().toLowerCase().contains("act_uniq_variable") && "23505".equals(exception.getSQLState()) && exception.getErrorCode() == 23505)
+        || (exception.getMessage().toLowerCase().contains("act_uniq_variable_index_c") && "23505".equals(exception.getSQLState()) && exception.getErrorCode() == 23505)
+        // Informix
+        || (exception.getMessage().toLowerCase().contains("act_uniq_variable") && "23000".equals(exception.getSQLState()) && exception.getErrorCode() == -239)
         ) {
         return true;
       }
