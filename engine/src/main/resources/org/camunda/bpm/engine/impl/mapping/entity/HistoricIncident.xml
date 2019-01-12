@@ -275,6 +275,15 @@
        ${limitAfterWithoutOffset})
   </delete>
 
+  <delete id="deleteHistoricIncidentsByRemovalTime_informix"
+          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+    <bind name="date" value="'REMOVAL_TIME_'"/>
+    <bind name="reportPeriodUnitName" value="'MINUTE'"/>
+    delete from ${prefix}ACT_HI_INCIDENT
+    where REMOVAL_TIME_ &lt;= #{parameter.removalTime}
+    <include refid="andWhereMinuteInDateBetweenSql"/>
+  </delete>
+
   <!-- HISTORIC INCIDENT RESULTMAP -->
 
   <resultMap id="historicIncidentResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.HistoricIncidentEntity">

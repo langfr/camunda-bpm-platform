@@ -313,7 +313,7 @@
         and RES.RESOURCE_ID_ = #{resourceId}
       </if>
       <if test="queryByPermission">
-        and ${bitand1}RES.PERMS_${bitand2}${permission}${bitand3} = ${permission}
+        and ${bitand1}RES.PERMS_${bitand2}#{permission}${bitand3} = #{permission}
       </if>
 
       <if test="!queryByResourceType &amp;&amp; resourcesIntersection != null &amp;&amp; resourcesIntersection.size > 0">
@@ -353,7 +353,12 @@
       <!-- User GRANT -->
       <if test="permCheck.resourceIdQueryParam != null || (permCheck.resourceId != null &amp;&amp; !permCheck.resourceId.equals('*')) ">
         WHEN
+          <if test="permCheck.resourceIdQueryParam != null">
+          ${permCheck.resourceIdQueryParam} IN
+          </if>
+          <if test="permCheck.resourceId != null">
           EXISTS
+          </if>
             (SELECT
                     A.RESOURCE_ID_
              FROM
@@ -363,7 +368,7 @@
              AND
                     A.USER_ID_ = #{authUserId, jdbcType=VARCHAR}
              AND
-                    ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+                    ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms,  jdbcType=INTEGER}
              AND
                     A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
              AND
@@ -374,7 +379,12 @@
       <!-- User REVOKE -->
       <if test="revokeAuthorizationCheckEnabled &amp;&amp; (permCheck.resourceIdQueryParam != null || (permCheck.resourceId != null &amp;&amp; !permCheck.resourceId.equals('*'))) ">
         WHEN
+          <if test="permCheck.resourceIdQueryParam != null">
+          ${permCheck.resourceIdQueryParam} IN
+          </if>
+          <if test="permCheck.resourceId != null">
           EXISTS
+          </if>
             (SELECT
                     A.RESOURCE_ID_
              FROM
@@ -384,7 +394,7 @@
              AND
                     A.USER_ID_ = #{authUserId, jdbcType=VARCHAR}
              AND
-                    ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} != ${permCheck.perms}
+                    ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} != #{permCheck.perms,  jdbcType=INTEGER}
              AND
                     A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
              AND
@@ -404,7 +414,7 @@
            AND
                   A.USER_ID_ = #{authUserId, jdbcType=VARCHAR}
            AND
-                  ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+                  ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms, jdbcType=INTEGER}
            AND
                   A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
            AND
@@ -424,7 +434,7 @@
            AND
                   A.USER_ID_ = #{authUserId, jdbcType=VARCHAR}
            AND
-                  ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} != ${permCheck.perms}
+                  ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} != #{permCheck.perms, jdbcType=INTEGER}
            AND
                   A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
            AND
@@ -441,7 +451,12 @@
                 <!-- Group GRANTS -->
                 <if test="permCheck.resourceIdQueryParam != null || (permCheck.resourceId != null &amp;&amp; !permCheck.resourceId.equals('*')) ">
                   WHEN
+                    <if test="permCheck.resourceIdQueryParam != null">
+                    ${permCheck.resourceIdQueryParam} IN
+                    </if>
+                    <if test="permCheck.resourceId != null">
                     EXISTS
+                    </if>
                       (SELECT
                               A.RESOURCE_ID_
                        FROM
@@ -451,7 +466,7 @@
                        AND
                               A.GROUP_ID_ IN <foreach item="item" index="index" collection="authGroupIds" open="(" separator="," close=")">#{item}</foreach>
                        AND
-                              ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+                              ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms,  jdbcType=INTEGER}
                        AND
                               A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                        AND
@@ -462,7 +477,12 @@
                 <!-- Group REVOKES -->
                 <if test="revokeAuthorizationCheckEnabled &amp;&amp; (permCheck.resourceIdQueryParam != null || (permCheck.resourceId != null &amp;&amp; !permCheck.resourceId.equals('*'))) ">
                   WHEN
+                    <if test="permCheck.resourceIdQueryParam != null">
+                    ${permCheck.resourceIdQueryParam} IN
+                    </if>
+                    <if test="permCheck.resourceId != null">
                     EXISTS
+                    </if>
                       (SELECT
                               A.RESOURCE_ID_
                        FROM
@@ -472,7 +492,7 @@
                        AND
                               A.GROUP_ID_ IN <foreach item="item" index="index" collection="authGroupIds" open="(" separator="," close=")">#{item}</foreach>
                        AND
-                              ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} != ${permCheck.perms}
+                              ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} != #{permCheck.perms,  jdbcType=INTEGER}
                        AND
                               A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                        AND
@@ -492,7 +512,7 @@
                      AND
                             A.GROUP_ID_ IN <foreach item="item" index="index" collection="authGroupIds" open="(" separator="," close=")">#{item}</foreach>
                      AND
-                            ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+                            ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms, jdbcType=INTEGER}
                      AND
                             A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                      AND
@@ -512,7 +532,7 @@
                      AND
                             A.GROUP_ID_ IN <foreach item="item" index="index" collection="authGroupIds" open="(" separator="," close=")">#{item}</foreach>
                      AND
-                            ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} != ${permCheck.perms}
+                            ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} != #{permCheck.perms, jdbcType=INTEGER}
                      AND
                             A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                      AND
@@ -527,7 +547,12 @@
                           <!-- GLOBAL GRANTS -->
                           <if test="permCheck.resourceIdQueryParam != null || (permCheck.resourceId != null &amp;&amp; !permCheck.resourceId.equals('*')) ">
                             WHEN
+                              <if test="permCheck.resourceIdQueryParam != null">
+                              ${permCheck.resourceIdQueryParam} IN
+                              </if>
+                              <if test="permCheck.resourceId != null">
                               EXISTS
+                              </if>
                                 (SELECT
                                         A.RESOURCE_ID_
                                  FROM
@@ -537,7 +562,7 @@
                                  AND
                                         A.USER_ID_ = '*'
                                  AND
-                                        ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+                                        ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms,  jdbcType=INTEGER}
                                  AND
                                         A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                                  AND
@@ -548,7 +573,12 @@
                           <!-- GLOBAL REVOKES -->
                           <if test="revokeAuthorizationCheckEnabled &amp;&amp; (permCheck.resourceIdQueryParam != null || (permCheck.resourceId != null &amp;&amp; !permCheck.resourceId.equals('*'))) ">
                             WHEN
+                              <if test="permCheck.resourceIdQueryParam != null">
+                              ${permCheck.resourceIdQueryParam} IN
+                              </if>
+                              <if test="permCheck.resourceId != null">
                               EXISTS
+                              </if>
                                 (SELECT
                                         A.RESOURCE_ID_
                                  FROM
@@ -558,7 +588,7 @@
                                  AND
                                         A.USER_ID_ = '*'
                                  AND
-                                        ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} != ${permCheck.perms}
+                                        ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} != #{permCheck.perms,  jdbcType=INTEGER}
                                  AND
                                         A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                                  AND
@@ -578,7 +608,7 @@
                                AND
                                       A.USER_ID_ = '*'
                                AND
-                                      ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+                                      ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms, jdbcType=INTEGER}
                                AND
                                       A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                                AND
@@ -598,7 +628,7 @@
                                AND
                                       A.USER_ID_ = '*'
                                AND
-                                      ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} != ${permCheck.perms}
+                                      ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} != #{permCheck.perms, jdbcType=INTEGER}
                                AND
                                       A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER}
                                AND
@@ -717,12 +747,12 @@
       AND (
       <if test="disjunctive">
         <foreach item="permCheck" index="index" collection="atomicChecks" open="(" separator="OR" close=")">
-          A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER} AND ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+          A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER} AND ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms,  jdbcType=INTEGER}
         </foreach>
       </if>
       <if test="!disjunctive">
         <foreach item="permCheck" index="index" collection="atomicChecks" open="(" separator="AND" close=")">
-          A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER} AND ${bitand1}A.PERMS_${bitand2}${permCheck.perms}${bitand3} = ${permCheck.perms}
+          A.RESOURCE_TYPE_ = #{permCheck.resourceType, jdbcType=INTEGER} AND ${bitand1}A.PERMS_${bitand2}#{permCheck.perms, jdbcType=INTEGER}${bitand3} = #{permCheck.perms,  jdbcType=INTEGER}
         </foreach>
       </if>
       )

@@ -207,6 +207,15 @@
        ${limitAfterWithoutOffset})
   </delete>
 
+  <delete id="deleteCommentsByRemovalTime_informix"
+          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+    <bind name="date" value="'REMOVAL_TIME_'"/>
+    <bind name="reportPeriodUnitName" value="'MINUTE'"/>
+    delete from ${prefix}ACT_HI_COMMENT
+    where REMOVAL_TIME_ &lt;= #{parameter.removalTime}
+    <include refid="andWhereMinuteInDateBetweenSql"/>
+  </delete>
+
   <!-- COMMENT RESULTMAP -->
 
   <resultMap id="commentResultMap" type="org.camunda.bpm.engine.impl.persistence.entity.CommentEntity">
