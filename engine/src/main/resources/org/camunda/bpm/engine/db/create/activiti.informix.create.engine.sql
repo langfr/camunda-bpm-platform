@@ -1,3 +1,19 @@
+--
+-- Copyright © 2012 - 2018 camunda services GmbH and various authors (info@camunda.com)
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+--
+
 create table ACT_GE_PROPERTY (
   NAME_ varchar(64) not null,
   VALUE_ varchar(255),
@@ -31,6 +47,10 @@ create table ACT_GE_BYTEARRAY (
   BYTES_ byte,
   GENERATED_ boolean,
   TENANT_ID_ varchar(64),
+  TYPE_ integer,
+  CREATE_TIME_ datetime year to fraction(5),
+  ROOT_PROC_INST_ID_ varchar(64),
+  REMOVAL_TIME_ datetime year to fraction(5),
   primary key (ID_)
 );
 
@@ -46,6 +66,7 @@ create table ACT_RE_DEPLOYMENT (
 create table ACT_RU_EXECUTION (
   ID_ varchar(64) not null,
   REV_ integer,
+  ROOT_PROC_INST_ID_ varchar(64),
   PROC_INST_ID_ varchar(64),
   BUSINESS_KEY_ varchar(255),
   PARENT_ID_ varchar(64),
@@ -90,6 +111,7 @@ create table ACT_RU_JOB (
   PRIORITY_ bigint not null default 0,
   SEQUENCE_COUNTER_ bigint,
   TENANT_ID_ varchar(64),
+  CREATE_TIME_ datetime year to fraction(5),
   primary key (ID_)
 );
 
@@ -285,9 +307,11 @@ create table ACT_RU_BATCH (
   SUSPENSION_STATE_ integer,
   CONFIGURATION_ varchar(255),
   TENANT_ID_ varchar(64),
+  CREATE_USER_ID_ varchar(255),
   primary key (ID_)
 );
 
+create index ACT_IDX_EXECUTION_ROOT_PI on ACT_RU_EXECUTION(ROOT_PROC_INST_ID_);
 create index ACT_IDX_EXEC_BUSKEY on ACT_RU_EXECUTION(BUSINESS_KEY_);
 create index ACT_IDX_EXEC_TENANT_ID on ACT_RU_EXECUTION(TENANT_ID_);
 create index ACT_IDX_TASK_CREATE on ACT_RU_TASK(CREATE_TIME_);
@@ -308,6 +332,7 @@ create index ACT_IDX_JOB_EXECUTION_ID on ACT_RU_JOB(EXECUTION_ID_);
 create index ACT_IDX_JOB_PROCINST on ACT_RU_JOB(PROCESS_INSTANCE_ID_);
 create index ACT_IDX_JOB_TENANT_ID on ACT_RU_JOB(TENANT_ID_);
 create index ACT_IDX_JOBDEF_TENANT_ID on ACT_RU_JOBDEF(TENANT_ID_);
+create index ACT_IDX_JOB_JOB_DEF_ID on ACT_RU_JOB(JOB_DEF_ID_);
 
 -- new metric milliseconds column
 create index ACT_IDX_METER_LOG_MS on ACT_RU_METER_LOG(MILLISECONDS_);
@@ -323,7 +348,6 @@ create index ACT_IDX_EXT_TASK_TENANT_ID on ACT_RU_EXT_TASK(TENANT_ID_);
 create index ACT_IDX_EXT_TASK_PRIORITY on ACT_RU_EXT_TASK(PRIORITY_);
 create index ACT_IDX_EXT_TASK_ERR_DETAILS on ACT_RU_EXT_TASK(ERROR_DETAILS_ID_);
 create index ACT_IDX_AUTH_GROUP_ID on ACT_RU_AUTHORIZATION(GROUP_ID_);
-create index ACT_IDX_JOB_JOB_DEF_ID on ACT_RU_JOB(JOB_DEF_ID_);
 
 create function ACT_FCT_USER_ID_OR_ID_(USER_ID_ varchar(255),ID_ varchar(64)) returning varchar(255) with (not variant); return nvl(USER_ID_,ID_); end function;
 create function ACT_FCT_GROUP_ID_OR_ID_(GROUP_ID_ varchar(255),ID_ varchar(64)) returning varchar(255) with (not variant); return nvl(GROUP_ID_,ID_); end function;
@@ -490,6 +514,8 @@ create index ACT_IDX_AUTH_RESOURCE_ID on ACT_RU_AUTHORIZATION(RESOURCE_ID_);
 
 
 -- indexes to improve deployment
+create index ACT_IDX_BYTEARRAY_ROOT_PI on ACT_GE_BYTEARRAY(ROOT_PROC_INST_ID_);
+create index ACT_IDX_BYTEARRAY_RM_TIME on ACT_GE_BYTEARRAY(REMOVAL_TIME_);
 create index ACT_IDX_BYTEARRAY_NAME on ACT_GE_BYTEARRAY(NAME_);
 create index ACT_IDX_DEPLOYMENT_NAME on ACT_RE_DEPLOYMENT(NAME_);
 create index ACT_IDX_DEPLOYMENT_TENANT_ID on ACT_RE_DEPLOYMENT(TENANT_ID_);
