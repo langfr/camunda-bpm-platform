@@ -747,6 +747,24 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     addDatabaseSpecificStatement(INFORMIX, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
 
+    addDatabaseSpecificStatement(INFORMIX, "deleteAttachmentsByRemovalTime", "deleteAttachmentsByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteCommentsByRemovalTime", "deleteCommentsByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricActivityInstancesByRemovalTime", "deleteHistoricActivityInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricDecisionInputInstancesByRemovalTime", "deleteHistoricDecisionInputInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricDecisionInstancesByRemovalTime", "deleteHistoricDecisionInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricDecisionOutputInstancesByRemovalTime", "deleteHistoricDecisionOutputInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricDetailsByRemovalTime", "deleteHistoricDetailsByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteExternalTaskLogByRemovalTime", "deleteExternalTaskLogByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricIdentityLinkLogByRemovalTime", "deleteHistoricIdentityLinkLogByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricIncidentsByRemovalTime", "deleteHistoricIncidentsByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteJobLogByRemovalTime", "deleteJobLogByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricProcessInstancesByRemovalTime", "deleteHistoricProcessInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricTaskInstancesByRemovalTime", "deleteHistoricTaskInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricVariableInstancesByRemovalTime", "deleteHistoricVariableInstancesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteUserOperationLogByRemovalTime", "deleteUserOperationLogByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteByteArraysByRemovalTime", "deleteByteArraysByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteHistoricBatchesByRemovalTime", "deleteHistoricBatchesByRemovalTime_informix");
+
     constants = new HashMap<String, String>();
     constants.put("constant.event", "'event'");
     constants.put("constant.op_message", "NEW_VALUE_ || '_|_' || PROPERTY_");
@@ -754,8 +772,9 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.datepart.quarter", "QUARTER");
     constants.put("constant.datepart.month", "MONTH");
     constants.put("constant.datepart.minute", "MINUTE");
-    constants.put("constant.null.startTime", "null START_TIME_");
+    constants.put("constant.null.startTime", "CAST(NULL AS DATETIME) AS START_TIME_");
     constants.put("constant.varchar.cast", "'${key}'");
+    constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR(255)) AS REPORTER_");
     dbSpecificConstants.put(INFORMIX, constants);
   }
 
