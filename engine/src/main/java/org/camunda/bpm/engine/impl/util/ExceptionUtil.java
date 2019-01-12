@@ -133,8 +133,11 @@ public class ExceptionUtil {
     List<SQLException> relatedSqlExceptions = findRelatedSqlExceptions(cause);
     for (SQLException exception : relatedSqlExceptions) {
 
+      // Exception.message can be null on Informix
+      if (exception.getMessage() == null) {
+          return false;
       // PostgreSQL doesn't allow for a proper check
-      if ("23503".equals(exception.getSQLState()) && exception.getErrorCode() == 0) {
+      } else if ("23503".equals(exception.getSQLState()) && exception.getErrorCode() == 0) {
         return false;
       } else if (
         // SqlServer
@@ -170,7 +173,10 @@ public class ExceptionUtil {
 
     List<SQLException> relatedSqlExceptions = findRelatedSqlExceptions(cause);
     for (SQLException exception : relatedSqlExceptions) {
-      if (
+      // Exception.message can be null on Informix
+      if (exception.getMessage() == null) {
+        return false;
+      } else if (
         // MySQL & MariaDB
         (exception.getMessage().toLowerCase().contains("act_uniq_variable") && "23000".equals(exception.getSQLState()) && exception.getErrorCode() == 1062)
         // PostgreSQL
