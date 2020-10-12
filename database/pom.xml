@@ -30,12 +30,12 @@
     <version.db2-11.1>11.1.1.1</version.db2-11.1>
     <version.db2-10.5>10.5.0.5</version.db2-10.5>
     <version.db2>${version.db2-10.5}</version.db2>
-    <version.postgresql>9.4.1212</version.postgresql>
+    <version.postgresql>42.2.17</version.postgresql>
     <version.informix>4.10</version.informix>
 
     <!-- CockroachDB is compatible with PostgreSQL 9.5,
     so a different version of the JDBC driver needs to be used -->
-    <version.cockroachdb>42.0.0</version.cockroachdb>
+    <version.cockroachdb>42.2.17</version.cockroachdb>
 
     <!-- needed for sql script and backward compatibility checks -->
     <camunda.version.old>7.13.0</camunda.version.old>
