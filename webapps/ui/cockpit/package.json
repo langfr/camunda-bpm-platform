@@ -34,7 +34,7 @@
     "react": "16.12.0",
     "react-bootstrap": "0.33.1",
     "react-dom": "16.12.0",
-    "react-router-dom": "5.1.2",
+    "react-router-dom": "5.2.0",
     "superagent": "5.2.1"
   },
   "scripts": {
