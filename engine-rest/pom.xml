@@ -15,7 +15,7 @@
 
   <properties>
     <jackson.version>2.12.1</jackson.version>
-    <jackson.databind.version>${jackson.version}</jackson.databind.version>
+    <jackson.databind.version>2.12.2</jackson.databind.version>
   </properties>
 
   <dependencyManagement>
