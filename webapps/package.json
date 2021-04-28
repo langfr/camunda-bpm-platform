@@ -1,7 +1,7 @@
 {
   "name": "camunda-bpm-webapp",
   "private": true,
-  "version": "7.15.0-SNAPSHOT",
+  "version": "7.16.0-SNAPSHOT",
   "gruntConfig": {
     "connectPort": 8020,
     "livereloadPort": 8021,
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@bpmn-io/dmn-migrate": "0.4.3",
+    "@bpmn-io/form-js": "0.0.8",
     "angular": "1.8.2",
     "angular-animate": "1.8.2",
     "angular-cookies": "1.8.2",
@@ -44,7 +45,7 @@
     "clipboard": "2.0.6",
     "cmmn-js": "0.20.0",
     "dmn-js": "10.0.0",
-    "dmn-js-decision-table": "10.0.0",
+    "dmn-js-decision-table": "10.1.0",
     "dmn-js-drd": "10.0.0",
     "dmn-js-literal-expression": "10.0.0",
     "dmn-js-shared": "10.0.0",
