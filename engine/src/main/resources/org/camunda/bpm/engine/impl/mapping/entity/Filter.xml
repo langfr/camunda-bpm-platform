@@ -109,7 +109,7 @@
     ${limitAfter}
   </select>
 
-  <select id="selectFilterByQueryCriteria_oracleDb2" parameterType="org.camunda.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap">
+  <select id="selectFilterByQueryCriteria_oracleDb2" parameterType="org.camunda.bpm.engine.impl.filter.FilterQueryImpl" resultMap="filterResultMap_postgres">
     <!--
     SEE: https://app.camunda.com/jira/browse/CAM-6014
      -->
