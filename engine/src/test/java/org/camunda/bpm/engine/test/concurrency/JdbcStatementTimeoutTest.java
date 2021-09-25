@@ -92,7 +92,7 @@ public class JdbcStatementTimeoutTest extends ConcurrencyTestHelper {
    * (see https://github.com/cockroachdb/cockroach/issues/41335)
    */
   @Test
-  @RequiredDatabase(excludes = { DbSqlSessionFactory.MARIADB, DbSqlSessionFactory.DB2, DbSqlSessionFactory.CRDB })
+  @RequiredDatabase(excludes = { DbSqlSessionFactory.MARIADB, DbSqlSessionFactory.DB2, DbSqlSessionFactory.INFORMIX, DbSqlSessionFactory.CRDB })
   public void testTimeoutOnUpdate() {
     createJobEntity();
 
