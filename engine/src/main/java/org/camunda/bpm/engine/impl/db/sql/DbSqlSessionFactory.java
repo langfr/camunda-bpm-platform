@@ -44,7 +44,7 @@ public class DbSqlSessionFactory implements SessionFactory {
   public static final String MARIADB = "mariadb";
   public static final String CRDB = "cockroachdb";
   public static final String INFORMIX = "informix";
-  public static final String[] SUPPORTED_DATABASES = {MSSQL, DB2, ORACLE, H2, MYSQL, POSTGRES, MARIADB, INFORMIX};
+  public static final String[] SUPPORTED_DATABASES = {MSSQL, DB2, ORACLE, H2, MYSQL, POSTGRES, MARIADB, CRDB, INFORMIX};
 
   protected static final Map<String, Map<String, String>> databaseSpecificStatements = new HashMap<>();
 
@@ -724,11 +724,17 @@ public class DbSqlSessionFactory implements SessionFactory {
     optimizeDatabaseSpecificLimitAfterWithoutOffsetStatements.put(INFORMIX, "");
     databaseSpecificLimitBetweenStatements.put(INFORMIX, "");
     databaseSpecificLimitBetweenFilterStatements.put(INFORMIX, "");
+    databaseSpecificLimitBetweenAcquisitionStatements.put(INFORMIX, "");
     databaseSpecificLimitBeforeWithoutOffsetStatements.put(INFORMIX, "FIRST ${maxResults}");
     databaseSpecificLimitAfterWithoutOffsetStatements.put(INFORMIX, "");
     databaseSpecificOrderByStatements.put(INFORMIX, defaultOrderBy);
     databaseSpecificLimitBeforeNativeQueryStatements.put(INFORMIX, "");
     databaseSpecificDistinct.put(INFORMIX, "distinct");
+    databaseSpecificNumericCast.put(INFORMIX, "");
+
+    databaseSpecificCountDistinctBeforeStart.put(INFORMIX, defaultDistinctCountBeforeStart);
+    databaseSpecificCountDistinctBeforeEnd.put(INFORMIX, defaultDistinctCountBeforeEnd);
+    databaseSpecificCountDistinctAfterEnd.put(INFORMIX, defaultDistinctCountAfterEnd);
 
     databaseSpecificEscapeChar.put(INFORMIX, defaultEscapeChar);
 
@@ -745,7 +751,31 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificDaysComparator.put(INFORMIX, "DATE(${date}) + ${days} <= #{currentTimestamp}");
 
+    databaseSpecificCollationForCaseSensitivity.put(INFORMIX, "");
+
+    addDatabaseSpecificStatement(INFORMIX, "insertByteArray", "insertByteArray_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "updateByteArray", "updateByteArray_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectByteArray", "selectByteArray_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectByteArrays", "selectByteArrays_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectResourceByDeploymentIdAndResourceName", "selectResourceByDeploymentIdAndResourceName_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectResourceByDeploymentIdAndResourceNames", "selectResourceByDeploymentIdAndResourceNames_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectResourceByDeploymentIdAndResourceId", "selectResourceByDeploymentIdAndResourceId_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectResourceByDeploymentIdAndResourceIds", "selectResourceByDeploymentIdAndResourceIds_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectResourcesByDeploymentId", "selectResourcesByDeploymentId_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectResourceById", "selectResourceById_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectLatestResourcesByDeploymentName", "selectLatestResourcesByDeploymentName_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "insertIdentityInfo", "insertIdentityInfo_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "updateIdentityInfo", "updateIdentityInfo_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectIdentityInfoById", "selectIdentityInfoById_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectIdentityInfoByUserIdAndKey", "selectIdentityInfoByUserIdAndKey_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectIdentityInfoByUserId", "selectIdentityInfoByUserId_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectIdentityInfoDetails", "selectIdentityInfoDetails_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "insertComment", "insertComment_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectCommentsByTaskId", "selectCommentsByTaskId_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectCommentsByProcessInstanceId", "selectCommentsByProcessInstanceId_postgres");
+    addDatabaseSpecificStatement(INFORMIX, "selectCommentByTaskIdAndCommentId", "selectCommentByTaskIdAndCommentId_postgres");
     addDatabaseSpecificStatement(INFORMIX, "selectFilterByQueryCriteria", "selectFilterByQueryCriteria_oracleDb2");
+    addDatabaseSpecificStatement(INFORMIX, "selectFilter", "selectFilter_postgres");
 
     addDatabaseSpecificStatement(INFORMIX, "deleteAttachmentsByRemovalTime", "deleteAttachmentsByRemovalTime_informix");
     addDatabaseSpecificStatement(INFORMIX, "deleteCommentsByRemovalTime", "deleteCommentsByRemovalTime_informix");
@@ -764,6 +794,8 @@ public class DbSqlSessionFactory implements SessionFactory {
     addDatabaseSpecificStatement(INFORMIX, "deleteUserOperationLogByRemovalTime", "deleteUserOperationLogByRemovalTime_informix");
     addDatabaseSpecificStatement(INFORMIX, "deleteByteArraysByRemovalTime", "deleteByteArraysByRemovalTime_informix");
     addDatabaseSpecificStatement(INFORMIX, "deleteHistoricBatchesByRemovalTime", "deleteHistoricBatchesByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteAuthorizationsByRemovalTime", "deleteAuthorizationsByRemovalTime_informix");
+    addDatabaseSpecificStatement(INFORMIX, "deleteTaskMetricsByRemovalTime", "deleteTaskMetricsByRemovalTime_informix");
 
     constants = new HashMap<String, String>();
     constants.put("constant.event", "'event'");
@@ -774,6 +806,7 @@ public class DbSqlSessionFactory implements SessionFactory {
     constants.put("constant.datepart.minute", "MINUTE");
     constants.put("constant.null.startTime", "CAST(NULL AS DATETIME) AS START_TIME_");
     constants.put("constant.varchar.cast", "'${key}'");
+    constants.put("constant.integer.cast", "cast(NULL as integer)");
     constants.put("constant.null.reporter", "CAST(NULL AS VARCHAR(255)) AS REPORTER_");
     dbSpecificConstants.put(INFORMIX, constants);
   }
