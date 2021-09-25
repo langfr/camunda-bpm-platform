@@ -83,6 +83,15 @@
        ${limitAfterWithoutOffset})
   </delete>
 
+  <delete id="deleteTaskMetricsByRemovalTime_informix"
+          parameterType="org.camunda.bpm.engine.impl.db.ListQueryParameterObject">
+    <bind name="date" value="'TIMESTAMP_'"/>
+    <bind name="reportPeriodUnitName" value="'MINUTE'"/>
+    delete from ${prefix}ACT_RU_TASK_METER_LOG
+    where TIMESTAMP_ &lt;= #{parameter.removalTime}
+    <include refid="andWhereMinuteInDateBetweenSql"/>
+  </delete>
+
   <!-- SELECT -->
 
   <select id="selectUniqueTaskWorkerCount" parameterType="java.util.Map" resultType="long">
