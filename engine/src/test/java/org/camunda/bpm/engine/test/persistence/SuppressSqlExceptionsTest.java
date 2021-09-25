@@ -175,7 +175,7 @@ public class SuppressSqlExceptionsTest {
   }
 
   @RequiredHistoryLevel(ProcessEngineConfigurationImpl.HISTORY_ACTIVITY)
-  @RequiredDatabase(excludes = DbSqlSessionFactory.MARIADB)
+  @RequiredDatabase(excludes = { DbSqlSessionFactory.MARIADB, DbSqlSessionFactory.INFORMIX })
   @Test
   public void shouldThrowExceptionOnInsert_ColumnSizeExceeded() {
     // given
@@ -320,7 +320,7 @@ public class SuppressSqlExceptionsTest {
 
 
   @Test
-  @RequiredDatabase(excludes = DbSqlSessionFactory.MARIADB)
+  @RequiredDatabase(excludes = { DbSqlSessionFactory.MARIADB, DbSqlSessionFactory.INFORMIX })
   public void shouldThrowExceptionOnUpdate() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")

@@ -38,8 +38,8 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.ibm.informix.jdbc</groupId>
-      <artifactId>ifxjdbc</artifactId>
+      <groupId>com.ibm.informix</groupId>
+      <artifactId>jdbc</artifactId>
       <scope>runtime</scope>
     </dependency>
 
