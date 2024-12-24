@@ -16,15 +16,14 @@
 --
 
 insert into ACT_GE_SCHEMA_LOG
-values ('500', CURRENT, '7.16.0');
+values ('600', CURRENT, '7.17.0');
 
-create table ACT_RE_CAMFORMDEF (
-    ID_ varchar(64) not null,
-    REV_ integer,
-    KEY_ varchar(255) not null,
-    VERSION_ integer not null,
-    DEPLOYMENT_ID_ varchar(64),
-    RESOURCE_NAME_ lvarchar(4000),
-    TENANT_ID_ varchar(64),
-    primary key (ID_)
-);
+-- https://jira.camunda.com/browse/CAM-14006 --
+ALTER TABLE ACT_RU_JOB 
+  ADD LAST_FAILURE_LOG_ID_ varchar(64);
+  
+ALTER TABLE ACT_RU_EXT_TASK 
+  ADD LAST_FAILURE_LOG_ID_ varchar(64);
+
+create index ACT_IDX_HI_VARINST_NAME on ACT_HI_VARINST(NAME_);
+create index ACT_IDX_HI_VARINST_ACT_INST_ID on ACT_HI_VARINST(ACT_INST_ID_);

@@ -11,5 +11,6 @@
     <module name="javax.api" />
     <module name="sun.jdk" />
     <module name="org.camunda.spin.camunda-spin-core" />
+    <module name="org.joda.time" slot="2.1" />
   </dependencies>
 </module>

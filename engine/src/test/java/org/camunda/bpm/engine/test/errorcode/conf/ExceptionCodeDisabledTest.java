@@ -20,7 +20,9 @@ import org.assertj.core.api.ThrowableAssert;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.identity.User;
+import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
 import org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode;
+import org.camunda.bpm.engine.impl.test.RequiredDatabase;
 import org.camunda.bpm.engine.test.errorcode.FailingJavaDelegateWithErrorCode;
 import org.camunda.bpm.engine.test.util.ProcessEngineBootstrapRule;
 import org.camunda.bpm.engine.test.util.ProcessEngineTestRule;
@@ -66,6 +68,7 @@ public class ExceptionCodeDisabledTest {
   }
 
   @Test
+  @RequiredDatabase(excludes = DbSqlSessionFactory.INFORMIX)
   public void shouldReturnDefaultErrorCodeWhenColumnSizeTooSmall() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")

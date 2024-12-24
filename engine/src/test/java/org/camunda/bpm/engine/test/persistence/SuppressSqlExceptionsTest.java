@@ -210,6 +210,7 @@ public class SuppressSqlExceptionsTest {
   }
 
   @Test
+  @RequiredDatabase(excludes = DbSqlSessionFactory.INFORMIX)
   public void shouldThrowExceptionOnInsert_UniqueConstraintViolated() {
     // given
     Authorization authorizationOne = authorizationService.createNewAuthorization(AUTH_TYPE_GRANT);

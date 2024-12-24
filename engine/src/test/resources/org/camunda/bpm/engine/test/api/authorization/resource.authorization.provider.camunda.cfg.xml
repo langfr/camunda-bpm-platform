@@ -32,6 +32,9 @@
     <!-- resource authorization provider -->
     <property name="resourceAuthorizationProvider" ref="myResourceAuthorizationProvider" />
 
+    <!-- https://github.com/camunda/camunda-bpm-platform/commit/0f11b877e78df66bdd34544c491449fbf2c86029 -->
+    <!-- telemetry configuration -->
+    <property name="telemetryReporterActivate" value="false"/>
   </bean>
 
   <bean id="myResourceAuthorizationProvider" class="org.camunda.bpm.engine.test.api.authorization.MyResourceAuthorizationProvider" />

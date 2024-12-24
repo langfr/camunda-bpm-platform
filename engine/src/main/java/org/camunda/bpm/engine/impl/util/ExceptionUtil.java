@@ -23,6 +23,7 @@ import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MARI
 import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
 import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
 import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
+import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.INFORMIX;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -143,6 +144,7 @@ public class ExceptionUtil {
     String message = sqlException.getMessage();
     return message.contains("too long") ||
         message.contains("too large") ||
+        message.contains("exceeds") ||
         message.contains("TOO LARGE") ||
         message.contains("ORA-01461") ||
         message.contains("ORA-01401") ||
@@ -207,9 +209,7 @@ public class ExceptionUtil {
         // PostgreSQL
         "23503".equals(sqlState) && errorCode == 0 ||
         // Informix
-        message.contains("referential constraint") ||
-        "23000".equals(sqlState) && errorCode == -691;
-    }
+        errorCode == -691 || errorCode == -692;
   }
 
   public static boolean checkVariableIntegrityViolation(PersistenceException persistenceException) {
@@ -235,7 +235,7 @@ public class ExceptionUtil {
         || (message.contains("act_uniq_variable") && "23505".equals(sqlState) && errorCode == 23505)
         // Informix
         || (message.contains("act_uniq_variable") && "23000".equals(sqlState) && errorCode == -239)
-	;
+    ;
   }
 
   public static boolean checkCrdbTransactionRetryException(Throwable exception) {
@@ -281,7 +281,7 @@ public class ExceptionUtil {
     POSTGRES(0, "40P01"),
     CRDB(0, "40001"),
     H2(40001, "40001"),
-    INFORMIX(-143, "40001");
+    INFORMIX(-244, "IX000");
 
     protected final int errorCode;
     protected final String sqlState;

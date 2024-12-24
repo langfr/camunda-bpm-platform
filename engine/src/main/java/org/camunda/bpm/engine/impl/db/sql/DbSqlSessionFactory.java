@@ -753,6 +753,14 @@ public class DbSqlSessionFactory implements SessionFactory {
 
     databaseSpecificCollationForCaseSensitivity.put(INFORMIX, "");
 
+    databaseSpecificAuthJoinStart.put(INFORMIX, defaultAuthOnStart);
+    databaseSpecificAuthJoinEnd.put(INFORMIX, defaultAuthOnEnd);
+    databaseSpecificAuthJoinSeparator.put(INFORMIX, defaultAuthOnSeparator);
+
+    databaseSpecificAuth1JoinStart.put(INFORMIX, defaultAuthOnStart);
+    databaseSpecificAuth1JoinEnd.put(INFORMIX, defaultAuthOnEnd);
+    databaseSpecificAuth1JoinSeparator.put(INFORMIX, defaultAuthOnSeparator);
+
     addDatabaseSpecificStatement(INFORMIX, "insertByteArray", "insertByteArray_postgres");
     addDatabaseSpecificStatement(INFORMIX, "updateByteArray", "updateByteArray_postgres");
     addDatabaseSpecificStatement(INFORMIX, "selectByteArray", "selectByteArray_postgres");

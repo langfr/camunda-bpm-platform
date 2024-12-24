@@ -24,6 +24,7 @@
 
   <property name="db.name" value="cockroachdb" dbms="cockroachdb"/>
   <property name="db.name" value="db2" dbms="db2"/>
+  <property name="db.name" value="informix" dbms="informix"/>
   <property name="db.name" value="h2" dbms="h2"/>
   <property name="db.name" value="mariadb" dbms="mariadb"/>
   <property name="db.name" value="mssql" dbms="mssql"/>

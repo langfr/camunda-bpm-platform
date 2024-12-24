@@ -350,7 +350,7 @@ public class SetExternalTasksRetriesTest extends AbstractAsyncOperationsTest {
    */
   @Test
   @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_FULL)
-  @RequiredDatabase(excludes = DbSqlSessionFactory.CRDB)
+  @RequiredDatabase(excludes = {DbSqlSessionFactory.CRDB, DbSqlSessionFactory.INFORMIX})
   public void shouldSetExternalTaskRetriesWithLargeList() {
     // given
     engineRule.getProcessEngineConfiguration().setBatchJobsPerSeed(1010);

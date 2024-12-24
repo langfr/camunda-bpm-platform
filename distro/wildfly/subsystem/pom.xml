@@ -41,6 +41,13 @@
       <artifactId>wildfly-ejb3</artifactId>
       <version>${version.wildfly}</version>
       <scope>provided</scope>
+      <!-- https://github.com/camunda/camunda-bpm-platform/commit/e336ffca586524aae8a714f8b4a9d2d93d41440d -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.jboss.openjdk-orb</groupId>
+          <artifactId>openjdk-orb</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>

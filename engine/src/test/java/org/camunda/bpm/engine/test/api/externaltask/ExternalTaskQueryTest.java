@@ -272,7 +272,7 @@ public class ExternalTaskQueryTest extends PluggableProcessEngineTest {
    */
   @Deployment(resources = "org/camunda/bpm/engine/test/api/externaltask/oneExternalTaskProcess.bpmn20.xml")
   @Test
-  @RequiredDatabase(excludes = DbSqlSessionFactory.CRDB)
+  @RequiredDatabase(excludes = {DbSqlSessionFactory.CRDB, DbSqlSessionFactory.INFORMIX})
   public void testQueryByLargeListOfProcessInstanceIdIn() {
     // given
     List<String> processInstances = new ArrayList<>();

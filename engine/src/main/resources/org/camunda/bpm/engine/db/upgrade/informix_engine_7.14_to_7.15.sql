@@ -16,7 +16,7 @@
 --
 
 insert into ACT_GE_SCHEMA_LOG
-values ('400', CURRENT_TIMESTAMP, '7.15.0');
+values ('400', CURRENT, '7.15.0');
 
 -- https://jira.camunda.com/browse/CAM-13013
 

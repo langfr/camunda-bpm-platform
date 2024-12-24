@@ -367,7 +367,7 @@ public class GetHistoricVariableUpdatesForOptimizeTest {
    * See CAM-12239 for the performance.
    */
   @Test
-  @RequiredDatabase(excludes = {DbSqlSessionFactory.H2, DbSqlSessionFactory.CRDB})
+  @RequiredDatabase(excludes = {DbSqlSessionFactory.H2, DbSqlSessionFactory.CRDB, DbSqlSessionFactory.INFORMIX})
   public void testFetchLargeNumberOfObjectVariables() {
     // given
     BpmnModelInstance simpleDefinition = Bpmn.createExecutableProcess("process")

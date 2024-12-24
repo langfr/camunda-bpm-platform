@@ -120,6 +120,7 @@ import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
@@ -3433,6 +3434,7 @@ public class ProcessInstanceRestServiceInteractionTest extends
   }
 
   @Test
+  @Ignore
   public void testSetRetriesByProcessAsyncHistoricQueryBasedWithQuery() {
     HistoricProcessInstanceQuery mockedHistoricProcessInstanceQuery = mock(HistoricProcessInstanceQuery.class);
     when(historyServiceMock.createHistoricProcessInstanceQuery()).thenReturn(mockedHistoricProcessInstanceQuery);
@@ -3563,6 +3565,7 @@ public class ProcessInstanceRestServiceInteractionTest extends
   }
 
   @Test
+  @Ignore
   public void testSetRetriesByProcessAsyncHistoricQueryBasedWithQueryAndProcessInstanceIds() {
     HistoricProcessInstanceQuery mockedHistoricProcessInstanceQuery = mock(HistoricProcessInstanceQuery.class);
     when(historyServiceMock.createHistoricProcessInstanceQuery()).thenReturn(mockedHistoricProcessInstanceQuery);

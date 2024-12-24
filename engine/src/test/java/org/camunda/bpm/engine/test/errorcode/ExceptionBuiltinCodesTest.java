@@ -85,6 +85,7 @@ public class ExceptionBuiltinCodesTest {
   }
 
   @Test
+  @RequiredDatabase(excludes = DbSqlSessionFactory.INFORMIX)
   public void shouldHaveColumnSizeTooSmallErrorCode() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")

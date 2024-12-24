@@ -43,6 +43,7 @@ import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MARI
 import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.MSSQL;
 import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.ORACLE;
 import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.POSTGRES;
+import static org.camunda.bpm.engine.impl.util.ExceptionUtil.DEADLOCK_CODES.INFORMIX;
 
 /**
  * HEADS-UP: If a test fails, please make sure to adjust the error code / sql state for the respective
@@ -127,6 +128,11 @@ public class DeadlockTest {
       provokeDeadlock();
       assertThat(sqlException.getSQLState()).isEqualTo(H2.getSqlState());
       assertThat(sqlException.getErrorCode()).isEqualTo(H2.getErrorCode());
+      break;
+    case DbSqlSessionFactory.INFORMIX:
+      provokeDeadlock();
+      assertThat(sqlException.getSQLState()).isEqualTo(INFORMIX.getSqlState());
+      assertThat(sqlException.getErrorCode()).isEqualTo(INFORMIX.getErrorCode());
       break;
     default:
       fail("database unknown");

@@ -14,8 +14,6 @@
   </parent>
 
   <properties>
-    <version.httpclient>4.5.13</version.httpclient>
-
     <engine.runtime>${project.build.directory}/camunda-tomcat</engine.runtime>
     <tomcat.runtime>${engine.runtime}/server/apache-tomcat-${version.tomcat}</tomcat.runtime>
     <http.port>${tomcat.connector.http.port}</http.port>

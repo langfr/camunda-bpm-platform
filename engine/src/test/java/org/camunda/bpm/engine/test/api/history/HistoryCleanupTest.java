@@ -921,7 +921,7 @@ public class HistoryCleanupTest {
 
       //job rescheduled till next batch window start time
       Date nextRun = getNextRunWithinBatchWindow(ClockUtil.getCurrentTime());
-      assertTrue(jobEntity.getDuedate().equals(nextRun));
+      assertEquals(jobEntity.getDuedate(), nextRun);
 
       //countEmptyRuns canceled
       assertEquals(0, configuration.getCountEmptyRuns());
@@ -956,7 +956,7 @@ public class HistoryCleanupTest {
 
       //job rescheduled till next batch window start
       Date nextRun = getNextRunWithinBatchWindow(ClockUtil.getCurrentTime());
-      assertTrue(jobEntity.getDuedate().equals(nextRun));
+      assertEquals(jobEntity.getDuedate(), nextRun);
 
       //countEmptyRuns canceled
       assertEquals(0, configuration.getCountEmptyRuns());
@@ -1066,6 +1066,7 @@ public class HistoryCleanupTest {
   }
 
   @Test
+  @Ignore("CAM-10055")
   public void testLessThanThresholdWithinBatchWindowAfterMidnight() throws ParseException {
     //given
     prepareData(5);

@@ -16,15 +16,4 @@
 --
 
 insert into ACT_GE_SCHEMA_LOG
-values ('500', CURRENT, '7.16.0');
-
-create table ACT_RE_CAMFORMDEF (
-    ID_ varchar(64) not null,
-    REV_ integer,
-    KEY_ varchar(255) not null,
-    VERSION_ integer not null,
-    DEPLOYMENT_ID_ varchar(64),
-    RESOURCE_NAME_ lvarchar(4000),
-    TENANT_ID_ varchar(64),
-    primary key (ID_)
-);
+values ('800', CURRENT, '7.19.0');

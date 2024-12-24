@@ -38,5 +38,7 @@
     <module name="org.camunda.bpm.dmn.camunda-engine-dmn" />
     <module name="org.camunda.bpm.juel.camunda-juel" services="import"/>
 
+    <module name="org.camunda.bpm.dmn.camunda-engine-feel-scala" />
+
   </dependencies>
 </module>

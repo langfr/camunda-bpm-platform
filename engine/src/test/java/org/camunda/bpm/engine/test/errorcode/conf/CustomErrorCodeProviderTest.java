@@ -21,8 +21,10 @@ import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.impl.db.sql.DbSqlSessionFactory;
 import org.camunda.bpm.engine.impl.errorcode.BuiltinExceptionCode;
 import org.camunda.bpm.engine.impl.errorcode.ExceptionCodeProvider;
+import org.camunda.bpm.engine.impl.test.RequiredDatabase;
 import org.camunda.bpm.engine.test.errorcode.FailingJavaDelegateWithCustomException;
 import org.camunda.bpm.engine.test.errorcode.FailingJavaDelegateWithErrorCode;
 import org.camunda.bpm.engine.test.errorcode.FailingJavaDelegateWithOleAndErrorCode;
@@ -305,6 +307,7 @@ public class CustomErrorCodeProviderTest {
   }
 
   @Test
+  @RequiredDatabase(excludes = DbSqlSessionFactory.INFORMIX)
   public void shouldHaveSubordinationToBuiltinCode() {
     // given
     BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("process")

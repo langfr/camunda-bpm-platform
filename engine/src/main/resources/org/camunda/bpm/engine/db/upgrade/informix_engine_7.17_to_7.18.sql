@@ -16,15 +16,19 @@
 --
 
 insert into ACT_GE_SCHEMA_LOG
-values ('500', CURRENT, '7.16.0');
+values ('700', CURRENT_TIMESTAMP, '7.18.0');
 
-create table ACT_RE_CAMFORMDEF (
-    ID_ varchar(64) not null,
-    REV_ integer,
-    KEY_ varchar(255) not null,
-    VERSION_ integer not null,
-    DEPLOYMENT_ID_ varchar(64),
-    RESOURCE_NAME_ lvarchar(4000),
-    TENANT_ID_ varchar(64),
-    primary key (ID_)
-);
+-- https://jira.camunda.com/browse/CAM-14303 --
+ALTER TABLE ACT_RU_TASK
+  ADD LAST_UPDATED_ datetime year to fraction(5);
+create index ACT_IDX_TASK_LAST_UPDATED on ACT_RU_TASK(LAST_UPDATED_);
+
+-- https://jira.camunda.com/browse/CAM-14721
+ALTER TABLE ACT_RU_BATCH
+    ADD START_TIME_ datetime year to fraction(5);
+
+-- https://jira.camunda.com/browse/CAM-14722
+ALTER TABLE ACT_RU_BATCH
+    ADD EXEC_START_TIME_ datetime year to fraction(5);
+ALTER TABLE ACT_HI_BATCH
+    ADD EXEC_START_TIME_ datetime year to fraction(5);
